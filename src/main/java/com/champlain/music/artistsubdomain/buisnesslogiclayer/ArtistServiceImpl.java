@@ -43,7 +43,7 @@ public class ArtistServiceImpl implements ArtistService{
 
     @Override
     public ArtistResponseModel updateArtist(ArtistRequestModel artistRequestModel, String artistId) {
-        Artist oldArtist = artistRequestModelMapper.requestModelToEntity(artistRequestModel);
+        Artist oldArtist = artistRepository.findArtistByIdentifier_ArtistId(artistId);
         if(oldArtist != null) {
             Artist artist = artistRequestModelMapper.requestModelToEntity(artistRequestModel);
             artist.setIdentifier(new ArtistIdentifier(artistId));

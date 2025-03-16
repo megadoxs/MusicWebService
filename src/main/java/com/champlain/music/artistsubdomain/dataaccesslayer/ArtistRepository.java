@@ -4,5 +4,4 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ArtistRepository extends JpaRepository<Artist, Integer> {
     Artist findArtistByIdentifier_ArtistId(String artistId);
-    boolean existsArtistByIdentifier_ArtistId(String artistId);
 }

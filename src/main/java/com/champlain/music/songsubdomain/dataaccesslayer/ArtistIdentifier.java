@@ -1,4 +1,4 @@
-package com.champlain.music.artistsubdomain.dataaccesslayer;
+package com.champlain.music.songsubdomain.dataaccesslayer;
 
 import jakarta.persistence.Embeddable;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.util.UUID;
 @Getter
 @Setter
 public class ArtistIdentifier {
-    private String artistId;
+    String artistId;
     public ArtistIdentifier(String artistId) {
         this.artistId = artistId;
     }

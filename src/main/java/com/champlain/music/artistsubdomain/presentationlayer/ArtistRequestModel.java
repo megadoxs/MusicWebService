@@ -6,8 +6,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ArtistRequestModel { //TODO remove might not be needed
-//    private String identifier;
+public class ArtistRequestModel {
     private String firstName;
     private String LastName;
     private String stageName;

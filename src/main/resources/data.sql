@@ -1,3 +1,13 @@
+INSERT INTO users (user_identifier, first_name, last_name, date_of_birth, email, username, password)
+VALUES ('UID123456', 'Alice', 'Johnson', '1995-08-15', 'alice.johnson@example.com', 'alicej95', 'hashedpassword1'),
+       ('UID789012', 'Bob', 'Smith', '1990-05-22', 'bob.smith@example.com', 'bobsmith90', 'hashedpassword2'),
+       ('UID345678', 'Charlie', 'Brown', '1988-11-30', 'charlie.brown@example.com', 'charlieb88', 'hashedpassword3'),
+       ('UID901234', 'Diana', 'Prince', '2000-02-14', 'diana.prince@example.com', 'dianap00', 'hashedpassword4'),
+       ('UID567890', 'Ethan', 'Hunt', '1985-06-10', 'ethan.hunt@example.com', 'ethanh85', 'hashedpassword5');
+
+
+
+
 INSERT INTO artists (artist_id, first_name, last_name, stage_name)
 VALUES ('550e8400-e29b-41d4-a716-446655440000', 'Stefani', 'Germanotta', 'Lady Gaga'),
        ('550e8400-e29b-41d4-a716-446655440001', 'Marshall', 'Mathers', 'Eminem'),

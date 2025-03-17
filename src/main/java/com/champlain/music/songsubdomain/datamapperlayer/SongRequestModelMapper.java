@@ -9,6 +9,6 @@ import org.mapstruct.Mapping;
 public interface SongRequestModelMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "identifier", ignore = true)
-    @Mapping(target = "artists", expression = "java(song.getArtists().stream().map(id -> new com.champlain.music.songsubdomain.dataaccesslayer.ArtistIdentifier(id)).toList())")
+    @Mapping(target = "artists", expression = "java(song.getArtists())")
     Song requestModelToEntity(SongRequestModel song);
 }

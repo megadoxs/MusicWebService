@@ -3,6 +3,7 @@ package com.champlain.music.songsubdomain.dataaccesslayer;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -21,9 +22,10 @@ public class Song {
     private SongIdentifier identifier;
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "song_artists", joinColumns = @JoinColumn(name = "song_id"))
-    private List<ArtistIdentifier> artists;
+    private List<String> artists;
     private String title;
     @Enumerated(EnumType.STRING)
     private Genre genre;
     private LocalDate releaseDate;
+    private Time duration;
 }

@@ -24,6 +24,7 @@ public class Playlist {
     private String user;
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "playlist_songs", joinColumns = @JoinColumn(name = "playlist_id"))
+    @Column(name = "song_id")
     private List<String> songs;
     private Time duration; // the invariant
 }

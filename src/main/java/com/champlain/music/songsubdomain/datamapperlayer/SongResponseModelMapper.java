@@ -1,6 +1,5 @@
 package com.champlain.music.songsubdomain.datamapperlayer;
 
-import com.champlain.music.artistsubdomain.presentationlayer.ArtistController;
 import com.champlain.music.songsubdomain.dataaccesslayer.Song;
 import com.champlain.music.songsubdomain.presentationlayer.SongController;
 import com.champlain.music.songsubdomain.presentationlayer.SongResponseModel;
@@ -18,6 +17,7 @@ public interface SongResponseModelMapper {
     @Mapping(target = "identifier", expression = "java(song.getIdentifier().getSongId())")
     @Mapping(target = "artists", ignore = true)
     SongResponseModel entityToResponseModel(Song song);
+
     List<SongResponseModel> entityToResponseModelList(List<Song> songs);
 
     @AfterMapping

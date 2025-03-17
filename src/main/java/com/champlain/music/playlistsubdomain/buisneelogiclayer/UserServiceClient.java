@@ -27,8 +27,7 @@ public class UserServiceClient {
         try {
             String url = CLIENT_SERVICE_BASE_URL + "/" + userId;
             return restTemplate.getForObject(url, UserResponseModel.class);
-        }
-        catch (HttpClientErrorException ex) {
+        } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
     }

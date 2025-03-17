@@ -27,8 +27,7 @@ public class ArtistServiceClient {
         try {
             String url = CLIENT_SERVICE_BASE_URL + "/" + ArtistId;
             return restTemplate.getForObject(url, ArtistResponseModel.class);
-        }
-        catch (HttpClientErrorException ex) {
+        } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
     }

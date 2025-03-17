@@ -27,8 +27,7 @@ public class SongServiceClient {
         try {
             String url = CLIENT_SERVICE_BASE_URL + "/" + songId;
             return restTemplate.getForObject(url, SongResponseModel.class);
-        }
-        catch (HttpClientErrorException ex) {
+        } catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);
         }
     }

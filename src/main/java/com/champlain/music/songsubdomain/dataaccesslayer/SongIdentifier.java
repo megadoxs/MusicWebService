@@ -11,10 +11,12 @@ import java.util.UUID;
 @Setter
 public class SongIdentifier {
     private String songId;
+
     public SongIdentifier(String songId) {
         this.songId = songId;
     }
-    public SongIdentifier(){
+
+    public SongIdentifier() {
         this.songId = UUID.randomUUID().toString();
     }
 }

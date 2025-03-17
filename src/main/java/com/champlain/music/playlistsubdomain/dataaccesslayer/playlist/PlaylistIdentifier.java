@@ -11,10 +11,12 @@ import java.util.UUID;
 @Setter
 public class PlaylistIdentifier {
     private String playlistId;
+
     public PlaylistIdentifier(String playlistId) {
         this.playlistId = playlistId;
     }
-    public PlaylistIdentifier(){
+
+    public PlaylistIdentifier() {
         this.playlistId = UUID.randomUUID().toString();
     }
 }

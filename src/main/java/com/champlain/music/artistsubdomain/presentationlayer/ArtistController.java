@@ -11,6 +11,7 @@ import java.util.List;
 @RequestMapping("/api/v1/artists")
 public class ArtistController {
     private final ArtistService artistService;
+
     public ArtistController(ArtistService artistService) {
         this.artistService = artistService;
     }

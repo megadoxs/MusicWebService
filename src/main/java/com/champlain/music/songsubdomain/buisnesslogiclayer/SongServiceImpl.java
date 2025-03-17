@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class SongServiceImpl implements SongService{
+public class SongServiceImpl implements SongService {
     private final SongRepository songRepository;
     private final SongRequestModelMapper songRequestModelMapper;
     private final SongResponseModelMapper songResponseModelMapper;
@@ -52,7 +52,7 @@ public class SongServiceImpl implements SongService{
     public SongResponseModel addSong(SongRequestModel songRequestModel) {
         Song song = songRequestModelMapper.requestModelToEntity(songRequestModel);
         for (String artistIdentifier : song.getArtists()) {
-            if(artistServiceClient.getArtistById(artistIdentifier) == null)
+            if (artistServiceClient.getArtistById(artistIdentifier) == null)
                 throw new NotFoundException("artist with id " + artistIdentifier + " was not found");
         }
         song.setIdentifier(new SongIdentifier());
@@ -62,17 +62,16 @@ public class SongServiceImpl implements SongService{
     @Override
     public SongResponseModel updateSong(SongRequestModel songRequestModel, String songId) {
         Song oldSong = songRepository.findSongByIdentifier_SongId(songId);
-        if(oldSong != null) {
+        if (oldSong != null) {
             Song song = songRequestModelMapper.requestModelToEntity(songRequestModel);
             for (String artistIdentifier : song.getArtists()) {
-                if(artistServiceClient.getArtistById(artistIdentifier) == null)
+                if (artistServiceClient.getArtistById(artistIdentifier) == null)
                     throw new NotFoundException("artist with id " + artistIdentifier + " was not found");
             }
             song.setIdentifier(new SongIdentifier(songId));
             song.setId(oldSong.getId());
             return songResponseModelMapper.entityToResponseModel(songRepository.save(song));
-        }
-        else
+        } else
             throw new NotFoundException("song with id " + songId + " was not found");
     }
 
@@ -81,8 +80,7 @@ public class SongServiceImpl implements SongService{
         Song song = songRepository.findSongByIdentifier_SongId(songId);
         if (song != null) {
             songRepository.delete(song);
-        }
-        else
+        } else
             throw new NotFoundException("song with id " + songId + " was not found");
     }
 }

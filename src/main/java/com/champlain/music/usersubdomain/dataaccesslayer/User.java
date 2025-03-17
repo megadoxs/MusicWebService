@@ -18,8 +18,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(nullable = false, unique = true)
-    private String userIdentifier;
+    @Embedded
+    private UserIdentifier userIdentifier;
 
     private String firstName;
     private String lastName;
@@ -28,9 +28,4 @@ public class User {
 
     private String username;
     private String password;
-
-
-
-
-
 }

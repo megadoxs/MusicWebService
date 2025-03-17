@@ -22,6 +22,7 @@ public class Song {
     private SongIdentifier identifier;
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "song_artists", joinColumns = @JoinColumn(name = "song_id"))
+    @Column(name = "artist_id")
     private List<String> artists;
     private String title;
     @Enumerated(EnumType.STRING)

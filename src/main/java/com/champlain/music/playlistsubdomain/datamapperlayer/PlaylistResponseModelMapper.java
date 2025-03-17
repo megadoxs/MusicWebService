@@ -18,6 +18,7 @@ public interface PlaylistResponseModelMapper {
     @Mapping(target = "songs", ignore = true)
     @Mapping(target = "user", ignore = true)
     PlaylistResponseModel entityToResponseModel(Playlist playlist);
+
     List<PlaylistResponseModel> entityToResponseModelList(List<Playlist> playlists);
 
     @AfterMapping

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -20,4 +21,5 @@ public class SongResponseModel extends RepresentationModel<SongResponseModel> {
     private String title;
     private Genre genre;
     private LocalDate releaseDate;
+    private Time duration;
 }

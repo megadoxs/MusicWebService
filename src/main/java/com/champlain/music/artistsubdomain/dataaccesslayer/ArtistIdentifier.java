@@ -11,10 +11,12 @@ import java.util.UUID;
 @Setter
 public class ArtistIdentifier {
     private String artistId;
+
     public ArtistIdentifier(String artistId) {
         this.artistId = artistId;
     }
-    public ArtistIdentifier(){
+
+    public ArtistIdentifier() {
         this.artistId = UUID.randomUUID().toString();
     }
 }

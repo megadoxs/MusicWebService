@@ -16,5 +16,5 @@ public interface UserService {
 
     UserResponseModel updateUser(String userId, UserRequestModel newUserData);
 
-    String deleteUserbyUserId(String userId);
+    void deleteUserbyUserId(String userId);
 }

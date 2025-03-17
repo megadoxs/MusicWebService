@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ArtistServiceImpl implements ArtistService{
+public class ArtistServiceImpl implements ArtistService {
     private final ArtistRepository artistRepository;
     private final ArtistRequestModelMapper artistRequestModelMapper;
     private final ArtistResponseModelMapper artistResponseModelMapper;
@@ -44,13 +44,12 @@ public class ArtistServiceImpl implements ArtistService{
     @Override
     public ArtistResponseModel updateArtist(ArtistRequestModel artistRequestModel, String artistId) {
         Artist oldArtist = artistRepository.findArtistByIdentifier_ArtistId(artistId);
-        if(oldArtist != null) {
+        if (oldArtist != null) {
             Artist artist = artistRequestModelMapper.requestModelToEntity(artistRequestModel);
             artist.setIdentifier(new ArtistIdentifier(artistId));
             artist.setId(oldArtist.getId());
             return artistResponseModelMapper.entityToResponseModel(artistRepository.save(artist));
-        }
-        else
+        } else
             throw new NotFoundException("artist with id " + artistId + " was not found");
     }
 
@@ -59,8 +58,7 @@ public class ArtistServiceImpl implements ArtistService{
         Artist artist = artistRepository.findArtistByIdentifier_ArtistId(artistId);
         if (artist != null) {
             artistRepository.delete(artist);
-        }
-        else
+        } else
             throw new NotFoundException("artist with id " + artistId + " was not found");
     }
 }

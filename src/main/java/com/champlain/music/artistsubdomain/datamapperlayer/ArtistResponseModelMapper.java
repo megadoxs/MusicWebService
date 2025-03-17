@@ -16,6 +16,7 @@ import java.util.List;
 public interface ArtistResponseModelMapper {
     @Mapping(target = "identifier", expression = "java(artist.getIdentifier().getArtistId())")
     ArtistResponseModel entityToResponseModel(Artist artist);
+
     List<ArtistResponseModel> entityToResponseModelList(List<Artist> artists);
 
     @AfterMapping

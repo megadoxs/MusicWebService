@@ -1,5 +1,6 @@
-package com.champlain.music.songsubdomain.presentationlayer;
+package com.champlain.music.songsubdomain.buisnesslogiclayer;
 
+import com.champlain.music.songsubdomain.presentationlayer.ArtistResponseModel;
 import com.champlain.music.utils.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -17,10 +18,11 @@ public class ArtistServiceClient {
 
     public ArtistServiceClient(RestTemplateBuilder restTemplate) {
         this.restTemplate = restTemplate.build();
-        String customerServiceHost = "localhost";
-        String customerServicePort = "8080";
-        CLIENT_SERVICE_BASE_URL = "http://" + customerServiceHost + ":" + customerServicePort + "/api/v1/artists";
+        String artistServiceHost = "localhost";
+        String artistsServicePort = "8080";
+        CLIENT_SERVICE_BASE_URL = "http://" + artistServiceHost + ":" + artistsServicePort + "/api/v1/artists";
     }
+
     public ArtistResponseModel getArtistById(String ArtistId) {
         try {
             String url = CLIENT_SERVICE_BASE_URL + "/" + ArtistId;

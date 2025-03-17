@@ -1,4 +1,4 @@
-package com.champlain.music.playlistsubdomain.presentationlayer;
+package com.champlain.music.playlistsubdomain.dataaccesslayer.song;
 
 public enum Genre {
     POP,

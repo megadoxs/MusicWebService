@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Time;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -18,4 +19,5 @@ public class SongRequestModel {
     private String title;
     private Genre genre;
     private LocalDate releaseDate;
+    private Time duration;
 }

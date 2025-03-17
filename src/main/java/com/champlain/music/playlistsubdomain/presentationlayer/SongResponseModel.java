@@ -1,6 +1,6 @@
-package com.champlain.music.songsubdomain.presentationlayer;
+package com.champlain.music.playlistsubdomain.presentationlayer;
 
-import com.champlain.music.songsubdomain.dataaccesslayer.Genre;
+import com.champlain.music.playlistsubdomain.dataaccesslayer.song.Genre;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,4 +1,4 @@
-package com.champlain.music.playlistsubdomain.dataaccesslayer;
+package com.champlain.music.playlistsubdomain.dataaccesslayer.playlist;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -20,9 +20,10 @@ public class Playlist {
     @Embedded
     private PlaylistIdentifier identifier;
     private String name;
-    private String customer;
+    @Column(name = "\"user\"")
+    private String user;
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "playlist_songs", joinColumns = @JoinColumn(name = "playlist_id"))
     private List<String> songs;
-    private Time duration;
+    private Time duration; // the invariant
 }

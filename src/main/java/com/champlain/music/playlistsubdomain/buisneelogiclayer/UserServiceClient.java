@@ -1,7 +1,6 @@
 package com.champlain.music.playlistsubdomain.buisneelogiclayer;
 
-import com.champlain.music.playlistsubdomain.presentationlayer.CustomerResponseModel;
-import com.champlain.music.songsubdomain.presentationlayer.ArtistResponseModel;
+import com.champlain.music.playlistsubdomain.presentationlayer.UserResponseModel;
 import com.champlain.music.utils.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -13,21 +12,21 @@ import static org.springframework.http.HttpStatus.NOT_FOUND;
 
 @Slf4j
 @Component
-public class CustomerServiceClient { //TODO might change depending if chris calls it user or customer
+public class UserServiceClient {
     private final RestTemplate restTemplate;
     private final String CLIENT_SERVICE_BASE_URL;
 
-    public CustomerServiceClient(RestTemplateBuilder restTemplate) {
+    public UserServiceClient(RestTemplateBuilder restTemplate) {
         this.restTemplate = restTemplate.build();
-        String customerServiceHost = "localhost";
-        String customerServicePort = "8080";
-        CLIENT_SERVICE_BASE_URL = "http://" + customerServiceHost + ":" + customerServicePort + "/api/v1/customers";
+        String UserServiceHost = "localhost";
+        String UserServicePort = "8080";
+        CLIENT_SERVICE_BASE_URL = "http://" + UserServiceHost + ":" + UserServicePort + "/api/v1/users";
     }
 
-    public CustomerResponseModel getCustomerById(String customerId) {
+    public UserResponseModel getUserById(String userId) {
         try {
-            String url = CLIENT_SERVICE_BASE_URL + "/" + customerId;
-            return restTemplate.getForObject(url, CustomerResponseModel.class);
+            String url = CLIENT_SERVICE_BASE_URL + "/" + userId;
+            return restTemplate.getForObject(url, UserResponseModel.class);
         }
         catch (HttpClientErrorException ex) {
             throw handleHttpClientException(ex);

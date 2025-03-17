@@ -1,6 +1,9 @@
-package com.champlain.music.artistsubdomain.presentationlayer;
+package com.champlain.music.songsubdomain.presentationlayer;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.hateoas.RepresentationModel;
 
 @NoArgsConstructor

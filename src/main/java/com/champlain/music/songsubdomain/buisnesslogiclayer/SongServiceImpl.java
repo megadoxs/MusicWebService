@@ -17,26 +17,44 @@ public class SongServiceImpl implements SongService{
     private final SongRepository songRepository;
     private final SongRequestModelMapper songRequestModelMapper;
     private final SongResponseModelMapper songResponseModelMapper;
+    private final ArtistServiceClient artistServiceClient;
 
-    public SongServiceImpl(SongRepository songRepository, SongRequestModelMapper songRequestModelMapper, SongResponseModelMapper songResponseModelMapper) {
+    public SongServiceImpl(SongRepository songRepository, SongRequestModelMapper songRequestModelMapper, SongResponseModelMapper songResponseModelMapper, ArtistServiceClient artistServiceClient) {
         this.songRepository = songRepository;
         this.songRequestModelMapper = songRequestModelMapper;
         this.songResponseModelMapper = songResponseModelMapper;
+        this.artistServiceClient = artistServiceClient;
     }
 
     @Override
     public List<SongResponseModel> getAllSongs() {
-        return songResponseModelMapper.entityToResponseModelList(songRepository.findAll());
+        List<Song> songs = songRepository.findAll();
+        List<SongResponseModel> songResponseModels = songResponseModelMapper.entityToResponseModelList(songs);
+        songResponseModels.forEach(song -> song.setArtists(
+                songs.stream()
+                        .filter(s -> s.getIdentifier().getSongId().equals(song.getIdentifier()))
+                        .findAny()
+                        .map(s -> s.getArtists().stream().map(artistServiceClient::getArtistById).toList())
+                        .orElse(List.of())
+        ));
+        return songResponseModels;
     }
 
     @Override
     public SongResponseModel getSongById(String songId) {
-        return songResponseModelMapper.entityToResponseModel(songRepository.findSongByIdentifier_SongId(songId));
+        Song song = songRepository.findSongByIdentifier_SongId(songId);
+        SongResponseModel songResponseModel = songResponseModelMapper.entityToResponseModel(song);
+        songResponseModel.setArtists(song.getArtists().stream().map(artistServiceClient::getArtistById).toList());
+        return songResponseModel;
     }
 
     @Override
     public SongResponseModel addSong(SongRequestModel songRequestModel) {
         Song song = songRequestModelMapper.requestModelToEntity(songRequestModel);
+        for (String artistIdentifier : song.getArtists()) {
+            if(artistServiceClient.getArtistById(artistIdentifier) == null)
+                throw new NotFoundException("artist with id " + artistIdentifier + " was not found");
+        }
         song.setIdentifier(new SongIdentifier());
         return songResponseModelMapper.entityToResponseModel(songRepository.save(song));
     }
@@ -46,12 +64,16 @@ public class SongServiceImpl implements SongService{
         Song oldSong = songRepository.findSongByIdentifier_SongId(songId);
         if(oldSong != null) {
             Song song = songRequestModelMapper.requestModelToEntity(songRequestModel);
+            for (String artistIdentifier : song.getArtists()) {
+                if(artistServiceClient.getArtistById(artistIdentifier) == null)
+                    throw new NotFoundException("artist with id " + artistIdentifier + " was not found");
+            }
             song.setIdentifier(new SongIdentifier(songId));
             song.setId(oldSong.getId());
             return songResponseModelMapper.entityToResponseModel(songRepository.save(song));
         }
         else
-            throw new NotFoundException("artist with id " + songId + " was not found");
+            throw new NotFoundException("song with id " + songId + " was not found");
     }
 
     @Override
@@ -61,6 +83,6 @@ public class SongServiceImpl implements SongService{
             songRepository.delete(song);
         }
         else
-            throw new NotFoundException("artist with id " + songId + " was not found");
+            throw new NotFoundException("song with id " + songId + " was not found");
     }
 }

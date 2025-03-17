@@ -1,4 +1,4 @@
-package com.champlain.music.songsubdomain.presentationlayer;
+package com.champlain.music.playlistsubdomain.presentationlayer;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

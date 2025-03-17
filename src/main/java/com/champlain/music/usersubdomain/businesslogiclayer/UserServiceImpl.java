@@ -72,9 +72,9 @@ public class UserServiceImpl implements UserService {
             user.setPassword(newUserData.getPassword1());
             savedUser = this.userRepository.save(user);
             if (savedUser != null)
-                message = "Customer saved successfully.";
+                message = "User saved successfully.";
             else
-                message = "Could not save new customer into repository.";
+                message = "Could not save new User into repository.";
 
         }
         return this.userResponseMapper.entityToResponseModel(savedUser);

@@ -35,5 +35,9 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(this.userService.addUser(newUserData));
     }
 
-
+    @DeleteMapping("/{user_id}")
+    public ResponseEntity<String> deleteUserbyUserId(@PathVariable String user_id){
+        String message = this.userService.deleteUserbyUserId(user_id);
+        return ResponseEntity.status(HttpStatus.OK).body(message);
+    }
 }

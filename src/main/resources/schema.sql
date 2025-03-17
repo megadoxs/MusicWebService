@@ -1,167 +1,51 @@
-create table if not exists users
-(
-    id
-    integer
-    auto_increment
-    primary
-    key,
-    user_id
-    varchar
-(
-    36
-) not null,
-    first_name varchar
-(
-    50
-) not null,
-    last_name varchar
-(
-    50
-) not null,
-    date_of_birth date not null,
-    email varchar
-(
-    100
-) unique not null,
-    username varchar
-(
-    75
-) unique not null,
-    password varchar
-(
-    100
-) not null
+CREATE TABLE IF NOT EXISTS users (
+    id           INTEGER AUTO_INCREMENT PRIMARY KEY,
+    user_id      VARCHAR(36) NOT NULL,
+    first_name   VARCHAR(50) NOT NULL,
+    last_name    VARCHAR(50) NOT NULL,
+    date_of_birth DATE NOT NULL,
+    email        VARCHAR(100) UNIQUE NOT NULL,
+    username     VARCHAR(75) UNIQUE NOT NULL,
+    password     VARCHAR(100) NOT NULL
     );
 
-create table if not exists artists
-(
-    id
-    integer
-    auto_increment
-    primary
-    key,
-    artist_id
-    varchar
-(
-    36
-) not null unique,
-    first_name varchar
-(
-    50
-) not null,
-    last_name varchar
-(
-    50
-) not null,
-    stage_name varchar
-(
-    50
-)
+CREATE TABLE IF NOT EXISTS artists (
+    id         INTEGER AUTO_INCREMENT PRIMARY KEY,
+    artist_id  VARCHAR(36) NOT NULL UNIQUE,
+    first_name VARCHAR(50) NOT NULL,
+    last_name  VARCHAR(50) NOT NULL,
+    stage_name VARCHAR(50)
     );
 
-create table if not exists songs
-(
-    id
-    integer
-    auto_increment
-    primary
-    key,
-    song_id
-    varchar
-(
-    36
-) not null unique,
-    title varchar
-(
-    50
-) not null,
-    genre varchar
-(
-    50
-) not null,
-    release_date date not null,
-    duration Time not null
+CREATE TABLE IF NOT EXISTS songs (
+    id           INTEGER AUTO_INCREMENT PRIMARY KEY,
+    song_id      VARCHAR(36) NOT NULL UNIQUE,
+    title        VARCHAR(50) NOT NULL,
+    genre        VARCHAR(50) NOT NULL,
+    release_date DATE NOT NULL,
+    duration     TIME NOT NULL
     );
 
-create table if not exists song_artists
-(
-    song_id
-    integer,
-    artist_id
-    varchar
-(
-    36
-),
-    PRIMARY KEY
-(
-    song_id,
-    artist_id
-),
-    foreign key
-(
-    artist_id
-) references artists
-(
-    artist_id
-),
-    foreign key
-(
-    song_id
-) references songs
-(
-    id
-)
+CREATE TABLE IF NOT EXISTS song_artists (
+    song_id   INTEGER,
+    artist_id VARCHAR(36),
+    PRIMARY KEY (song_id, artist_id),
+    FOREIGN KEY (artist_id) REFERENCES artists(artist_id) ON DELETE CASCADE,
+    FOREIGN KEY (song_id) REFERENCES songs(id) ON DELETE CASCADE
     );
 
-create table if not exists playlists
-(
-    id
-    integer
-    auto_increment
-    primary
-    key,
-    playlist_id
-    varchar
-(
-    36
-) not null unique,
-    "user" varchar
-(
-    36
-) not null,
-    name varchar
-(
-    50
-) not null,
-    duration Time not null
+CREATE TABLE IF NOT EXISTS playlists (
+    id           INTEGER AUTO_INCREMENT PRIMARY KEY,
+    playlist_id  VARCHAR(36) NOT NULL UNIQUE,
+    "user"       VARCHAR(36) NOT NULL,
+    name         VARCHAR(50) NOT NULL,
+    duration     TIME NOT NULL
     );
 
-create table if not exists playlist_songs
-(
-    playlist_id
-    integer,
-    song_id
-    varchar
-(
-    36
-),
-    PRIMARY KEY
-(
-    playlist_id,
-    song_id
-),
-    foreign key
-(
-    song_id
-) references songs
-(
-    song_id
-),
-    foreign key
-(
-    playlist_id
-) references playlists
-(
-    id
-)
-    )
+CREATE TABLE IF NOT EXISTS playlist_songs (
+    playlist_id INTEGER,
+    song_id     VARCHAR(36),
+    PRIMARY KEY (playlist_id, song_id),
+    FOREIGN KEY (song_id) REFERENCES songs(song_id) ON DELETE CASCADE,
+    FOREIGN KEY (playlist_id) REFERENCES playlists(id) ON DELETE CASCADE
+    );

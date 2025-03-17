@@ -44,7 +44,7 @@ public class SongServiceImpl implements SongService {
     public SongResponseModel getSongById(String songId) {
         Song song = songRepository.findSongByIdentifier_SongId(songId);
         SongResponseModel songResponseModel = songResponseModelMapper.entityToResponseModel(song);
-        songResponseModel.setArtists(song.getArtists().stream().map(artistServiceClient::getArtistById).toList());
+        addArtist(songResponseModel, song);
         return songResponseModel;
     }
 
@@ -56,7 +56,9 @@ public class SongServiceImpl implements SongService {
                 throw new NotFoundException("artist with id " + artistIdentifier + " was not found");
         }
         song.setIdentifier(new SongIdentifier());
-        return songResponseModelMapper.entityToResponseModel(songRepository.save(song));
+        SongResponseModel songResponseModel = songResponseModelMapper.entityToResponseModel(songRepository.save(song));
+        addArtist(songResponseModel, song);
+        return songResponseModel;
     }
 
     @Override
@@ -70,7 +72,9 @@ public class SongServiceImpl implements SongService {
             }
             song.setIdentifier(new SongIdentifier(songId));
             song.setId(oldSong.getId());
-            return songResponseModelMapper.entityToResponseModel(songRepository.save(song));
+            SongResponseModel songResponseModel = songResponseModelMapper.entityToResponseModel(songRepository.save(song));
+            addArtist(songResponseModel, song);
+            return songResponseModel;
         } else
             throw new NotFoundException("song with id " + songId + " was not found");
     }
@@ -82,5 +86,9 @@ public class SongServiceImpl implements SongService {
             songRepository.delete(song);
         } else
             throw new NotFoundException("song with id " + songId + " was not found");
+    }
+
+    public void addArtist(SongResponseModel songResponseModel, Song song) {
+        songResponseModel.setArtists(song.getArtists().stream().map(artistServiceClient::getArtistById).toList());
     }
 }

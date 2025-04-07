@@ -1,0 +1,49 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+AddElementTag("microService", $shape=EightSidedShape(), $bgColor="CornflowerBlue", $fontColor="white", $legendText="micro service\neight sided")
+AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="lightSkyBlue", $fontColor="white")
+
+SHOW_PERSON_OUTLINE()
+
+title System Context diagram for Music Listening Platform.
+
+Person(user, "User", "A user of the Music Listening Platform.")
+
+
+System_Boundary(c1, "Music Listening Platform") {
+    Container(web_app, "Web Application", "Java, Spring MVC", "Delivers the static content and the Internet banking SPA")
+    Container(spa, "Single-Page App", "JavaScript, Angular", "Provides all the Internet banking functionality to customers via their web browser")
+    Container(api_gateway, "API-gateway", "Java, Docker Container", "Provides Internet banking functionality via API")
+    Container(as, "artist-service", "Java, Docker Container", "Provides Internet banking functionality via API")
+    Container(ss, "song-service", "Java, Docker Container", "Provides Internet banking functionality via API")
+    Container(us, "user-service", "Java, Docker Container", "Provides Internet banking functionality via API")
+    Container(ps, "playlist-service", "Java, Docker Container", "Provides Internet banking functionality via API")
+ContainerDb(artist_db, "artist-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+ContainerDb(song_db, "song-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+ContainerDb(user_db, "user-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+ContainerDb(play_db, "playlist-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+}
+
+Rel_Neighbor(web_app, spa, "Delivers")
+Rel(spa, api_gateway, "Uses", "async, JSON/HTTPS")
+
+Rel(user, web_app, "Uses", "HTTPS")
+Rel(user, spa, "Uses", "HTTPS")
+Rel(api_gateway, as, "Uses", "HTTPS")
+Rel(api_gateway, ss, "Uses", "HTTPS")
+Rel(api_gateway, us, "Uses", "HTTPS")
+Rel(api_gateway, ps, "Uses", "HTTPS")
+
+Rel(ps, ss, "Uses", "HTTPS")
+Rel(ps, us, "Uses", "HTTPS")
+Rel(ss, as, "Uses", "HTTPS")
+
+
+Rel_D(ps, play_db, "reads ...", "JDBC/SQL/TCP")
+Rel_D(ss, song_db, "reads ...", "JDBC/SQL/TCP")
+Rel_D(us, user_db, "reads ...", "JDBC/SQL/TCP")
+Rel_D(as, artist_db, "reads ...", "JDBC/SQL/TCP")
+
+@enduml

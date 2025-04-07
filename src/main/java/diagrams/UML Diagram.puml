@@ -1,11 +1,79 @@
 @startuml
-'https://plantuml.com/sequence-diagram
+hide circle
+top to bottom direction
+'left to right direction
 
-autonumber
+!define ENTITY(entityName) class entityName << Entity >>
+!define VALUE_OBJECT(valueObjectName) class valueObjectName << Value Object >>
+!define AGGREGATE_ROOT_ENTITY(aggregateRootEntityName) class aggregateRootEntityName << Aggregate Root >> << Entity >>
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+Package "User Management Sub-Domain" <<Rectangle>> #FFCDD2 {
+    AGGREGATE_ROOT_ENTITY(User) #FFCDD2 {
+        userId: UUID
+        username: String
+        password: String
+        email: String
+        firstName: String
+        lastName: String
+        dateOfBirth: Date
+    }
+    VALUE_OBJECT(UserIdentifier) #FFEBEE {
+        userId: UUID
+    }
+}
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
+Package "Song Management Sub-Domain" <<Rectangle>> #BBDEFB {
+    ENTITY(Song) #BBDEFB {
+        songId: UUID
+        title: String
+        genre: String
+        releaseDate: Date
+        duration: Time
+    }
+
+    VALUE_OBJECT(SongIdentifier) #E3F2FD {
+        songId: UUID
+    }
+}
+Package "Artist Management Sub-Domain" <<Rectangle>> #FFCC80 {
+
+    ENTITY(Artist) #FFB74D {
+            artistId: UUID
+            firstName: String
+            lastName: String
+            stageName: String
+        }
+
+    VALUE_OBJECT(ArtistIdentifier) #FFE0B2 {
+            artistId: UUID
+        }
+}
+
+Package "Playlist Management Sub-Domain" <<Rectangle>> #C8E6C9 {
+    note "Invariant: [When a song is added or deleted \nfrom a playlist, playlist duration is updated \nto equal the sum of durations of all songs \nit contains]" as durationInvariant
+    AGGREGATE_ROOT_ENTITY(Playlist) #81C784 {
+            playlistId: UUID
+            name: String
+            duration: Time
+        }
+
+    VALUE_OBJECT(PlaylistIdentifier) #C8F6DB {
+            playlistId: UUID
+        }
+
+}
+
+
+' Relationships
+User o- UserIdentifier
+
+Song o- SongIdentifier
+Song --> ArtistIdentifier
+
+'Artist --> Song : creates
+Artist o- ArtistIdentifier
+
+Playlist --> UserIdentifier
+Playlist --> SongIdentifier
+Playlist o- PlaylistIdentifier
 @enduml

@@ -9,7 +9,7 @@ VALUES ('c27242a2-abb9-45b2-a85d-ed9ffa15f92c', 'Alice', 'Johnson', '1995-08-15'
         'hashedpassword4'),
        ('57659e81-7c6b-4711-bb9e-bc73e1fa7824', 'Ethan', 'Hunt', '1985-06-10', 'ethan.hunt@example.com', 'ethanh85',
         'hashedpassword5');
-
+             
 INSERT INTO artists (artist_id, first_name, last_name, stage_name)
 VALUES ('550e8400-e29b-41d4-a716-446655440000', 'Stefani', 'Germanotta', 'Lady Gaga'),
        ('550e8400-e29b-41d4-a716-446655440001', 'Marshall', 'Mathers', 'Eminem'),

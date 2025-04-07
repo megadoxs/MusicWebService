@@ -8,9 +8,11 @@ LAYOUT_WITH_LEGEND()
 title System Context diagram for Music Listening Platform
 
 Person(User, "User", "A user of the Music Listening Platform.")
+Person(Artist, "Artist", "A music artist")
 System(music_system, "Music Listening Platform", "Allows users to listen to access music and manage playlists.")
 
 
 Rel(User, music_system, "Saves songs to playlists, creates playlists, and listens to songs.")
+Rel(Artist, music_system, "Creates songs and albums.")
 
 @enduml

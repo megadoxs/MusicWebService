@@ -1,0 +1,45 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.champlain: TRACE
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+spring:
+  application:
+    name: playlist-service
+#  config:
+#    activate:
+#      on-profile: default
+  datasource:
+    url: jdbc:mysql://mysql4/playlist-db
+    username: user
+    password: pwd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      platform: mysql
+      mode: always
+      logging:
+        enabled: true
+
+app:
+  user-service:
+    host: userservicehost
+    port: 8080
+  song-service:
+    host: songservicehost
+    port: 8080

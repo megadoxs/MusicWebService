@@ -1,0 +1,37 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+logging:
+  level:
+    root: INFO
+    org.springframework.web: DEBUG
+    com.champlain: TRACE
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+spring:
+  application:
+    name: user-service
+#  config:
+#    activate:
+#      on-profile: default
+  datasource:
+    url: jdbc:mysql://mysql1/user-db
+    username: user
+    password: pwd
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  sql:
+    init:
+      platform: mysql
+      mode: always
+      logging:
+        enabled: true

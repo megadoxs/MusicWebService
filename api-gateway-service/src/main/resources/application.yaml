@@ -1,0 +1,16 @@
+server:
+  port: 8080
+
+app:
+  user-service:
+    host: userservicehost
+    port: 8080
+  artist-service:
+    host: artistservicehost
+    port: 8080
+  song-service:
+    host: songservicehost
+    port: 8080
+  playlist-service:
+    host: playlistservicehost
+    port: 8080

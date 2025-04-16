@@ -4,8 +4,8 @@ services:
     hostname: userservicehost
     ports:
       - "8081:8080"
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
+    #    environment:
+    #      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       mysql1:
         condition: service_healthy
@@ -31,8 +31,8 @@ services:
     hostname: artistservicehost
     ports:
       - "8082:8080"
-#    environment:
-#      - "SPRING_PROFILES_ACTIVE=docker"
+    #    environment:
+    #      - "SPRING_PROFILES_ACTIVE=docker"
     depends_on:
       mysql2:
         condition: service_healthy
@@ -58,8 +58,8 @@ services:
     hostname: songservicehost
     ports:
       - "8083:8080"
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
+    #    environment:
+    #      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       mysql3:
         condition: service_healthy
@@ -85,8 +85,8 @@ services:
     hostname: playlistservicehost
     ports:
       - "8084:8080"
-#    environment:
-#      - SPRING_PROFILES_ACTIVE=docker
+    #    environment:
+    #      - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       mysql4:
         condition: service_healthy
@@ -106,6 +106,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+
+  gateway:
+    build: api-gateway-service
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - artist-service
+      - song-service
+      - playlist-service
 
 
   phpmyadmin:

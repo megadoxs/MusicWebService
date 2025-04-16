@@ -1,12 +1,19 @@
 package com.champlain.userservice.utils.exceptions;
 
-public class NotFoundException extends RuntimeException{
+public class NotFoundException extends RuntimeException {
 
-    public NotFoundException() {}
+    public NotFoundException() {
+    }
 
-    public NotFoundException(String message) { super(message); }
+    public NotFoundException(String message) {
+        super(message);
+    }
 
-    public NotFoundException(Throwable cause) { super(cause); }
+    public NotFoundException(Throwable cause) {
+        super(cause);
+    }
 
-    public NotFoundException(String message, Throwable cause) { super(message, cause); }
+    public NotFoundException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

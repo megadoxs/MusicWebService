@@ -1,12 +1,19 @@
 package com.champlain.artistservice.utils.exceptions;
 
-public class DuplicateVinException extends RuntimeException{
+public class DuplicateVinException extends RuntimeException {
 
-    public DuplicateVinException() {}
+    public DuplicateVinException() {
+    }
 
-    public DuplicateVinException(String message) { super(message); }
+    public DuplicateVinException(String message) {
+        super(message);
+    }
 
-    public DuplicateVinException(Throwable cause) { super(cause); }
+    public DuplicateVinException(Throwable cause) {
+        super(cause);
+    }
 
-    public DuplicateVinException(String message, Throwable cause) { super(message, cause); }
+    public DuplicateVinException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

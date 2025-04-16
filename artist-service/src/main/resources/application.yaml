@@ -12,9 +12,9 @@ logging:
 spring:
   application:
     name: artist-service
-#  config:
-#    activate:
-#      on-profile: default
+  #  config:
+  #    activate:
+  #      on-profile: default
   datasource:
     url: jdbc:mysql://mysql2/artist-db
     username: user

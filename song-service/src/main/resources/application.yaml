@@ -12,9 +12,9 @@ logging:
 spring:
   application:
     name: song-service
-#  config:
-#    activate:
-#      on-profile: default
+  #  config:
+  #    activate:
+  #      on-profile: default
   datasource:
     url: jdbc:mysql://mysql3/song-db
     username: user

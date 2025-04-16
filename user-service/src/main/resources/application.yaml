@@ -12,9 +12,9 @@ logging:
 spring:
   application:
     name: user-service
-#  config:
-#    activate:
-#      on-profile: default
+  #  config:
+  #    activate:
+  #      on-profile: default
   datasource:
     url: jdbc:mysql://mysql1/user-db
     username: user

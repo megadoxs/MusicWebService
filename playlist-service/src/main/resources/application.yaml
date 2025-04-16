@@ -12,9 +12,9 @@ logging:
 spring:
   application:
     name: playlist-service
-#  config:
-#    activate:
-#      on-profile: default
+  #  config:
+  #    activate:
+  #      on-profile: default
   datasource:
     url: jdbc:mysql://mysql4/playlist-db
     username: user

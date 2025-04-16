@@ -11,6 +11,7 @@ import java.util.List;
 @RequestMapping("/api/v1/playlists")
 public class PlaylistController {
     private final PlaylistService playlistService;
+
     public PlaylistController(PlaylistService playlistService) {
         this.playlistService = playlistService;
     }

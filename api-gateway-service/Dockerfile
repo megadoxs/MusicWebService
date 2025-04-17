@@ -4,12 +4,12 @@ WORKDIR /app
 COPY pom.xml .
 COPY .mvn .mvn
 COPY mvnw .
-RUN ./mvnw dependency:go-offline
+RUN mvn dependency:go-offline
 
 COPY . .
-RUN ./mvnw package -DskipTests
+RUN mvn package -DskipTests
 
-FROM eclipse-temurin:17-jdk-alpine
+FROM eclipse-temurin:17-jdk
 WORKDIR /app
 
 COPY --from=builder /app/target/*.jar app.jar

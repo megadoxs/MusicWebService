@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS artists;
 CREATE TABLE IF NOT EXISTS artists
 (
     id

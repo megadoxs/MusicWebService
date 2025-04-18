@@ -76,7 +76,30 @@
             <artifactId>mapstruct-processor</artifactId>
             <version>1.6.0</version>
         </dependency>
+
+
+        <!-- Spring Boot’s Test Starter (JUnit 5, Mockito, AssertJ, Hamcrest, JSONassert, JsonPath) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- In‑memory H2 DB for integration tests -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+
 
     <build>
         <plugins>

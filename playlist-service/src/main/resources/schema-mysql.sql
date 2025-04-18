@@ -1,3 +1,4 @@
+DROP TABLE IF EXISTS playlists;
 CREATE TABLE IF NOT EXISTS playlists
 (
     id

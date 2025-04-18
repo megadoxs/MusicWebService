@@ -1,3 +1,5 @@
+
+
 INSERT INTO songs (song_id, title, genre, release_date, duration)
 VALUES ('100e8400-e29b-41d4-a716-446655440010', 'Shallow', 'POP', '2018-09-27', '00:03:35'),
        ('100e8400-e29b-41d4-a716-446655440011', 'Lose Yourself', 'HIP_HOP', '2002-10-28', '00:05:26'),

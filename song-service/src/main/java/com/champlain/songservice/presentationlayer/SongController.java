@@ -41,4 +41,9 @@ public class SongController {
         songService.deleteSong(songId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/artist/{artistId}")
+    public ResponseEntity<List<SongResponseModel>> getSongsByArtistId(@PathVariable String artistId) {
+        return ResponseEntity.ok().body(songService.getSongsByArtistId(artistId));
+    }
 }

@@ -5,6 +5,7 @@ import com.champlain.userservice.dataaccesslayer.UserIdentifier;
 import com.champlain.userservice.dataaccesslayer.UserRepository;
 import com.champlain.userservice.datamapperlayer.UserRequestMapper;
 import com.champlain.userservice.datamapperlayer.UserResponseMapper;
+import com.champlain.userservice.domainclientlayer.PlaylistServiceClient;
 import com.champlain.userservice.presentationlayer.UserRequestModel;
 import com.champlain.userservice.presentationlayer.UserResponseModel;
 import com.champlain.userservice.utils.exceptions.InvalidInputException;
@@ -19,14 +20,14 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final UserResponseMapper userResponseMapper;
     private final UserRequestMapper userRequestMapper;
+    private final PlaylistServiceClient playlistServiceClient;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository,
-                           UserResponseMapper userResponseMapper,
-                           UserRequestMapper userRequestMapper) {
+    public UserServiceImpl(UserRepository userRepository, UserResponseMapper userResponseMapper, UserRequestMapper userRequestMapper, PlaylistServiceClient playlistServiceClient) {
         this.userRepository = userRepository;
         this.userResponseMapper = userResponseMapper;
         this.userRequestMapper = userRequestMapper;
+        this.playlistServiceClient = playlistServiceClient;
     }
 
     @Override
@@ -99,8 +100,9 @@ public class UserServiceImpl implements UserService {
         User foundUser = this.userRepository.findUserByUserIdentifier_UserId(userId);
         if (foundUser == null)
             throw new NotFoundException("User with " + userId + " not found.");
-        else
-            this.userRepository.delete(foundUser);
-
+        else{
+            userRepository.delete(foundUser);
+            playlistServiceClient.deletePlaylistsByUserId(userId);
+        }
     }
 }

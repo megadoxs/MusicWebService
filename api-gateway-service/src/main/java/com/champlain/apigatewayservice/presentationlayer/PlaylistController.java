@@ -1,6 +1,7 @@
 package com.champlain.apigatewayservice.presentationlayer;
 
 import com.champlain.apigatewayservice.buisnesslogiclayer.PlaylistService;
+import com.champlain.apigatewayservice.presentationlayer.artistdto.ArtistResponseModel;
 import com.champlain.apigatewayservice.presentationlayer.playlistdto.PlaylistRequestModel;
 import com.champlain.apigatewayservice.presentationlayer.playlistdto.PlaylistResponseModel;
 import lombok.extern.slf4j.Slf4j;
@@ -44,5 +45,10 @@ public class PlaylistController {
     public ResponseEntity<Void> deletePlaylist(@PathVariable String playlistId) {
         playlistService.deletePlaylist(playlistId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{playlistId}/artists")
+    public ResponseEntity<List<ArtistResponseModel>> getPlaylistArtists(@PathVariable String playlistId) {
+        return ResponseEntity.ok().body(playlistService.getPlaylistArtists(playlistId));
     }
 }

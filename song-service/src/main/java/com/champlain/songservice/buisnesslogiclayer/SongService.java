@@ -15,4 +15,6 @@ public interface SongService {
     SongResponseModel updateSong(SongRequestModel songRequestModel, String songId);
 
     void deleteSong(String songId);
+
+    List<SongResponseModel> getSongsByArtistId(String artistId);
 }

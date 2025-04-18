@@ -9,5 +9,6 @@ import org.mapstruct.Mapping;
 public interface UserRequestMapper {
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "userIdentifier", ignore = true)
+    @Mapping(target = "password", ignore = true)
     User requestModelToEntity(UserRequestModel customerRequestModel);
 }

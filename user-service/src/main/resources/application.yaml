@@ -35,6 +35,10 @@ spring:
       mode: always
       logging:
         enabled: true
+app:
+  playlist-service:
+    host: playlistservicehost
+    port: 8080
 ---
 #for h2
 spring:

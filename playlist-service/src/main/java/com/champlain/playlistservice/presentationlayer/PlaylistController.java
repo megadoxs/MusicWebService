@@ -46,4 +46,20 @@ public class PlaylistController {
     public ResponseEntity<List<ArtistResponseModel>> getAllArtists(@PathVariable String playlistId) {
         return ResponseEntity.ok().body(playlistService.getAllArtists(playlistId));
     }
+
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<PlaylistResponseModel>> getPlaylistsByUserId(@PathVariable String userId) {
+        return ResponseEntity.ok().body(playlistService.getPlaylistsByUserId(userId));
+    }
+
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<Void> deletePlaylistsByUserId(@PathVariable String userId) {
+        playlistService.deletePlaylistsByUserId(userId);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/song/{songId}")
+    public ResponseEntity<List<PlaylistResponseModel>> getPlaylistsBySongId(@PathVariable String songId) {
+        return ResponseEntity.ok().body(playlistService.getPlaylistsBySongId(songId));
+    }
 }

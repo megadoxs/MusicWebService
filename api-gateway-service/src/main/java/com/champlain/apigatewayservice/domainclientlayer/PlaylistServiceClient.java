@@ -1,5 +1,6 @@
 package com.champlain.apigatewayservice.domainclientlayer;
 
+import com.champlain.apigatewayservice.presentationlayer.artistdto.ArtistResponseModel;
 import com.champlain.apigatewayservice.presentationlayer.playlistdto.PlaylistRequestModel;
 import com.champlain.apigatewayservice.presentationlayer.playlistdto.PlaylistResponseModel;
 import com.champlain.apigatewayservice.utils.exceptions.InvalidInputException;
@@ -67,6 +68,14 @@ public class PlaylistServiceClient {
     public void deletePlaylist(String playlistId) {
         try {
             restTemplate.delete(PLAYLIST_SERVICE_BASE_URL + "/" + playlistId);
+        } catch (HttpClientErrorException e) {
+            throw handleHttpClientException(e);
+        }
+    }
+
+    public List<ArtistResponseModel> getPlaylistArtists(String playlistId) {
+        try {
+            return List.of(restTemplate.getForObject(PLAYLIST_SERVICE_BASE_URL + "/" + playlistId + "/artists", ArtistResponseModel[].class));
         } catch (HttpClientErrorException e) {
             throw handleHttpClientException(e);
         }

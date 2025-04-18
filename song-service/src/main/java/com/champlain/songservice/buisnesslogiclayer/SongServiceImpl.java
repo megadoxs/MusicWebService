@@ -6,6 +6,8 @@ import com.champlain.songservice.dataaccesslayer.SongRepository;
 import com.champlain.songservice.datamapperlayer.SongRequestModelMapper;
 import com.champlain.songservice.datamapperlayer.SongResponseModelMapper;
 import com.champlain.songservice.domainclientlayer.ArtistServiceClient;
+import com.champlain.songservice.domainclientlayer.PlaylistServiceClient;
+import com.champlain.songservice.presentationlayer.PlaylistResponseModel;
 import com.champlain.songservice.presentationlayer.SongRequestModel;
 import com.champlain.songservice.presentationlayer.SongResponseModel;
 import com.champlain.songservice.utils.exceptions.NotFoundException;
@@ -19,12 +21,14 @@ public class SongServiceImpl implements SongService {
     private final SongRequestModelMapper songRequestModelMapper;
     private final SongResponseModelMapper songResponseModelMapper;
     private final ArtistServiceClient artistServiceClient;
+    private final PlaylistServiceClient playlistServiceClient;
 
-    public SongServiceImpl(SongRepository songRepository, SongRequestModelMapper songRequestModelMapper, SongResponseModelMapper songResponseModelMapper, ArtistServiceClient artistServiceClient) {
+    public SongServiceImpl(SongRepository songRepository, SongRequestModelMapper songRequestModelMapper, SongResponseModelMapper songResponseModelMapper, ArtistServiceClient artistServiceClient, PlaylistServiceClient playlistServiceClient) {
         this.songRepository = songRepository;
         this.songRequestModelMapper = songRequestModelMapper;
         this.songResponseModelMapper = songResponseModelMapper;
         this.artistServiceClient = artistServiceClient;
+        this.playlistServiceClient = playlistServiceClient;
     }
 
     @Override
@@ -44,6 +48,10 @@ public class SongServiceImpl implements SongService {
     @Override
     public SongResponseModel getSongById(String songId) {
         Song song = songRepository.findSongByIdentifier_SongId(songId);
+
+        if(song == null)
+            throw new NotFoundException("song with id " + songId + " was not found");
+
         SongResponseModel songResponseModel = songResponseModelMapper.entityToResponseModel(song);
         addArtist(songResponseModel, song);
         return songResponseModel;
@@ -84,9 +92,30 @@ public class SongServiceImpl implements SongService {
     public void deleteSong(String songId) {
         Song song = songRepository.findSongByIdentifier_SongId(songId);
         if (song != null) {
+            for (PlaylistResponseModel playlist : playlistServiceClient.getPlaylistsBySongId(songId)){
+                if(playlist.getSongs().size() == 1)
+                    playlistServiceClient.deletePlaylistById(playlist.getIdentifier());
+                else if(playlist.getSongs().stream().anyMatch(s -> s.getIdentifier().equals(song.getIdentifier().getSongId()))){
+                    playlistServiceClient.removeSongFromPlaylist(playlist, songId);
+                }
+            }
             songRepository.delete(song);
         } else
             throw new NotFoundException("song with id " + songId + " was not found");
+    }
+
+    @Override
+    public List<SongResponseModel> getSongsByArtistId(String artistId) {
+        List<Song> songs = songRepository.findAllByArtistsContains(artistId);
+        List<SongResponseModel> songResponseModels = songResponseModelMapper.entityToResponseModelList(songs);
+        songResponseModels.forEach(song -> song.setArtists(
+                songs.stream()
+                        .filter(s -> s.getIdentifier().getSongId().equals(song.getIdentifier()))
+                        .findAny()
+                        .map(s -> s.getArtists().stream().map(artistServiceClient::getArtistById).toList())
+                        .orElse(List.of())
+        ));
+        return songResponseModels;
     }
 
     public void addArtist(SongResponseModel songResponseModel, Song song) {

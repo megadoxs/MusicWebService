@@ -18,4 +18,10 @@ public interface PlaylistService {
     void deletePlaylist(String playlistId);
 
     List<ArtistResponseModel> getAllArtists(String playlistId);
+
+    List<PlaylistResponseModel> getPlaylistsByUserId(String userId);
+
+    void deletePlaylistsByUserId(String userId);
+
+    List<PlaylistResponseModel> getPlaylistsBySongId(String songId);
 }

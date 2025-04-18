@@ -1,6 +1,7 @@
 package com.champlain.apigatewayservice.buisnesslogiclayer;
 
 import com.champlain.apigatewayservice.domainclientlayer.PlaylistServiceClient;
+import com.champlain.apigatewayservice.presentationlayer.artistdto.ArtistResponseModel;
 import com.champlain.apigatewayservice.presentationlayer.playlistdto.PlaylistRequestModel;
 import com.champlain.apigatewayservice.presentationlayer.playlistdto.PlaylistResponseModel;
 import org.springframework.stereotype.Service;
@@ -38,5 +39,10 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public void deletePlaylist(String playlistId) {
         playlistServiceClient.deletePlaylist(playlistId);
+    }
+
+    @Override
+    public List<ArtistResponseModel> getPlaylistArtists(String playlistId) {
+        return playlistServiceClient.getPlaylistArtists(playlistId);
     }
 }

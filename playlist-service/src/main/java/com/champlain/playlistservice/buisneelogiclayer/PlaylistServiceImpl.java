@@ -12,6 +12,7 @@ import com.champlain.playlistservice.presentationlayer.PlaylistRequestModel;
 import com.champlain.playlistservice.presentationlayer.PlaylistResponseModel;
 import com.champlain.playlistservice.presentationlayer.SongResponseModel;
 import com.champlain.playlistservice.utils.exceptions.NotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -59,6 +60,10 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public PlaylistResponseModel getPlaylistById(String playlistId) {
         Playlist playlist = playlistRepository.findByIdentifier_PlaylistId(playlistId);
+
+        if (playlist == null)
+            throw new NotFoundException("Playlist with id " + playlistId + " not found");
+
         PlaylistResponseModel playlistResponseModel = playlistResponseModelMapper.entityToResponseModel(playlist);
         addSongs(playlistResponseModel, playlist);
         addUser(playlistResponseModel, playlist);
@@ -126,6 +131,53 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public List<ArtistResponseModel> getAllArtists(String playlistId) {
         return getPlaylistById(playlistId).getSongs().stream().map(SongResponseModel::getArtists).flatMap(List::stream).distinct().toList();
+    }
+
+    @Override
+    public List<PlaylistResponseModel> getPlaylistsByUserId(String userId) {
+        List<Playlist> playlists = playlistRepository.findAllByUser(userId);
+        List<PlaylistResponseModel> playlistResponseModels = playlistResponseModelMapper.entityToResponseModelList(playlists);
+        playlistResponseModels.forEach(playlist -> playlist.setSongs(
+                playlists.stream()
+                        .filter(p -> p.getIdentifier().getPlaylistId().equals(playlist.getIdentifier()))
+                        .findAny()
+                        .map(p -> p.getSongs().stream().map(songServiceClient::getSongById).toList())
+                        .orElseGet(List::of)
+        ));
+        playlistResponseModels.forEach(playlist -> playlist.setUser(
+                playlists.stream()
+                        .filter(p -> p.getIdentifier().getPlaylistId().equals(playlist.getIdentifier()))
+                        .findAny()
+                        .map(p -> userServiceClient.getUserById(p.getUser()))
+                        .orElse(null)
+        ));
+        return playlistResponseModels;
+    }
+
+    @Override @Transactional
+    public void deletePlaylistsByUserId(String userId) {
+        playlistRepository.deleteAllByUser(userId);
+    }
+
+    @Override
+    public List<PlaylistResponseModel> getPlaylistsBySongId(String songId) {
+        List<Playlist> playlists = playlistRepository.findAllBySongsContains(songId);
+        List<PlaylistResponseModel> playlistResponseModels = playlistResponseModelMapper.entityToResponseModelList(playlists);
+        playlistResponseModels.forEach(playlist -> playlist.setSongs(
+                playlists.stream()
+                        .filter(p -> p.getIdentifier().getPlaylistId().equals(playlist.getIdentifier()))
+                        .findAny()
+                        .map(p -> p.getSongs().stream().map(songServiceClient::getSongById).toList())
+                        .orElseGet(List::of)
+        ));
+        playlistResponseModels.forEach(playlist -> playlist.setUser(
+                playlists.stream()
+                        .filter(p -> p.getIdentifier().getPlaylistId().equals(playlist.getIdentifier()))
+                        .findAny()
+                        .map(p -> userServiceClient.getUserById(p.getUser()))
+                        .orElse(null)
+        ));
+        return playlistResponseModels;
     }
 
     public void addUser(PlaylistResponseModel playlistResponseModel, Playlist playlist) {

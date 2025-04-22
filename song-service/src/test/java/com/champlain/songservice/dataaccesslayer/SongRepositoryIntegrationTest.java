@@ -6,6 +6,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,5 +59,61 @@ public class SongRepositoryIntegrationTest {
 
         //assert
         assertEquals(sizeDB, songs.size());
+    }
+
+
+    @Test
+    public void whenAddSong_ReturnSong(){
+        Song song = new Song();
+        song.setGenre(Genre.COUNTRY);
+        song.setArtists(List.of("some artist"));
+        song.setTitle("test");
+        song.setDuration(Time.valueOf(LocalTime.of(1, 1, 1)));
+        song.setReleaseDate(LocalDate.parse("2018-09-27"));
+        song.setIdentifier(new SongIdentifier());
+
+        Song savedSong = songRepository.save(song);
+
+        assertNotNull(savedSong);
+        assertEquals(song.getId(), savedSong.getId());
+        assertEquals(song.getIdentifier().getSongId(), savedSong.getIdentifier().getSongId());
+        assertEquals(song.getTitle(), savedSong.getTitle());
+        assertEquals(song.getGenre(), savedSong.getGenre());
+        assertEquals(song.getReleaseDate(), savedSong.getReleaseDate());
+        assertEquals(song.getDuration(), savedSong.getDuration());
+        assertArrayEquals(song.getArtists().toArray(), savedSong.getArtists().toArray());
+    }
+
+    @Test
+    public void whenUpdateSong_ReturnSong(){
+        Song foundSong = songRepository.findSongByIdentifier_SongId(VALID_SONG_ID);
+
+        Song song = new Song();
+        song.setGenre(Genre.COUNTRY);
+        song.setArtists(List.of("some artist"));
+        song.setTitle("test");
+        song.setDuration(Time.valueOf(LocalTime.of(1, 1, 1)));
+        song.setReleaseDate(LocalDate.parse("2018-09-27"));
+        song.setIdentifier(foundSong.getIdentifier());
+        song.setId(foundSong.getId());
+
+        Song savedSong = songRepository.save(song);
+
+        songRepository.save(savedSong);
+        assertNotNull(savedSong);
+        assertEquals(song.getId(), savedSong.getId());
+        assertEquals(song.getIdentifier().getSongId(), savedSong.getIdentifier().getSongId());
+        assertEquals(song.getTitle(), savedSong.getTitle());
+        assertEquals(song.getGenre(), savedSong.getGenre());
+        assertEquals(song.getReleaseDate(), savedSong.getReleaseDate());
+        assertEquals(song.getDuration(), savedSong.getDuration());
+        assertArrayEquals(song.getArtists().toArray(), savedSong.getArtists().toArray());
+    }
+
+    @Test
+    public void whenDeleteSong_ReturnNull(){
+        songRepository.delete(songRepository.findSongByIdentifier_SongId(VALID_SONG_ID));
+
+        assertNull(songRepository.findSongByIdentifier_SongId(VALID_SONG_ID));
     }
 }

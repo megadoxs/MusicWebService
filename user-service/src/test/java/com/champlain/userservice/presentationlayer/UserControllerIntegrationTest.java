@@ -176,6 +176,31 @@ public class UserControllerIntegrationTest {
     }
 
     @Test
+    public void whenAddUserWithDuplicateUsername_thenThrowDuplicateUsernameException() {
+        // Arrange
+        UserRequestModel UserToAdd = UserRequestModel.builder()
+                .firstName("test")
+                .lastName("test")
+                .username("alicej95")
+                .dateOfBirth(new Date())
+                .email("test@example.com")
+                .password1("test2")
+                .password2("test2")
+                .build();
+
+        // Act & Assert
+        webTestClient.post()
+                .uri(BASE_URI_USERS)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(UserToAdd)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.httpStatus").isEqualTo("BAD_REQUEST")
+                .jsonPath("$.message").isEqualTo("Username " + "alicej95" + " already exists.");
+    }
+
+    @Test
     public void whenUpdateNonExistentUser_thenThrowNotFoundException() {
         // Arrange
         UserRequestModel updatedUser = new UserRequestModel();
@@ -267,6 +292,31 @@ public class UserControllerIntegrationTest {
                 .expectBody()
                 .jsonPath("$.httpStatus").isEqualTo("BAD_REQUEST")
                 .jsonPath("$.message").isEqualTo("passwords do not match.");
+    }
+
+    @Test
+    public void whenUpdateUserWithDuplicateUsername_thenThrowDuplicateUsernameException() {
+        // Arrange
+        UserRequestModel UserToUpdate = UserRequestModel.builder()
+                .firstName("test")
+                .lastName("test")
+                .username("bobsmith90")
+                .dateOfBirth(new Date())
+                .email("test@example.com")
+                .password1("test2")
+                .password2("test2")
+                .build();
+
+        // Act & Assert
+        webTestClient.put()
+                .uri(BASE_URI_USERS + "/" + VALID_USER_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(UserToUpdate)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.httpStatus").isEqualTo("BAD_REQUEST")
+                .jsonPath("$.message").isEqualTo("Username " + "bobsmith90" + " already exists.");
     }
 
     @Test

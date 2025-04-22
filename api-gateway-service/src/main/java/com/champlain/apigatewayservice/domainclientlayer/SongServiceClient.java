@@ -2,6 +2,7 @@ package com.champlain.apigatewayservice.domainclientlayer;
 
 import com.champlain.apigatewayservice.presentationlayer.songdto.SongRequestModel;
 import com.champlain.apigatewayservice.presentationlayer.songdto.SongResponseModel;
+import com.champlain.apigatewayservice.utils.exceptions.DuplicateSongTitleException;
 import com.champlain.apigatewayservice.utils.exceptions.InvalidInputException;
 import com.champlain.apigatewayservice.utils.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.*;
 
 @Component
 @Slf4j
@@ -73,10 +73,10 @@ public class SongServiceClient {
     }
 
     private RuntimeException handleHttpClientException(HttpClientErrorException e) {
-        if (e.getStatusCode() == UNPROCESSABLE_ENTITY)
-            throw new InvalidInputException();
+        if (e.getStatusCode() == BAD_REQUEST)
+            throw new DuplicateSongTitleException(e.getMessage());
         else if (e.getStatusCode() == NOT_FOUND)
-            throw new NotFoundException();
+            throw new NotFoundException(e.getMessage());
         return e;
     }
 }

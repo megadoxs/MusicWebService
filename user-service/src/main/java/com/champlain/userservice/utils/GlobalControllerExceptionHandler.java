@@ -1,5 +1,6 @@
 package com.champlain.userservice.utils;
 
+import com.champlain.userservice.utils.exceptions.DuplicateUsernameException;
 import com.champlain.userservice.utils.exceptions.InvalidInputException;
 import com.champlain.userservice.utils.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -27,15 +28,13 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(BAD_REQUEST, request, ex);
     }
 
+    @ResponseStatus(BAD_REQUEST)
+    @ExceptionHandler(DuplicateUsernameException.class)
+    public HttpErrorInfo handleDuplicateUsernameException(WebRequest request, Exception ex) {
+        return createHttpErrorInfo(BAD_REQUEST, request, ex);
+    }
 
     private HttpErrorInfo createHttpErrorInfo(HttpStatus httpStatus, WebRequest request, Exception ex) {
-        final String path = request.getDescription(false);
-        // final String path = request.getPath().pathWithinApplication().value();
-        final String message = ex.getMessage();
-        log.debug("message is: " + message);
-
-        log.debug("Returning HTTP status: {} for path: {}, message: {}", httpStatus, path, message);
-
-        return new HttpErrorInfo(httpStatus, path, message);
+        return new HttpErrorInfo(httpStatus, request.getDescription(false), ex.getMessage());
     }
 }

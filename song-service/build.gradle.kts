@@ -65,7 +65,7 @@ tasks.jacocoTestReport {
     classDirectories.setFrom(
         files(classDirectories.files.map {
             fileTree(it) {
-                exclude("**/com/champlain/**/domainclientlayer/**", "**/com/champlain/songservice/presentationlayer/PlaylistResponseModel.java")
+                exclude("**/com/champlain/**/domainclientlayer/**", "**/com/champlain/songservice/presentationlayer/PlaylistResponseModel.class")
             }
         })
     )
@@ -93,7 +93,10 @@ tasks.jacocoTestCoverageVerification {
     classDirectories.setFrom(
         files(classDirectories.files.map {
             fileTree(it) {
-                exclude("**/com/champlain/**/domainclientlayer/**", "**/com/champlain/songservice/presentationlayer/PlaylistResponseModel.java")
+                exclude(
+                    "**/com/champlain/**/domainclientlayer/**",
+                    "**/com/champlain/songservice/presentationlayer/PlaylistResponseModel.class"
+                )
             }
         })
     )

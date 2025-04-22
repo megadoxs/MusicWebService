@@ -10,6 +10,7 @@ import com.champlain.songservice.domainclientlayer.PlaylistServiceClient;
 import com.champlain.songservice.presentationlayer.PlaylistResponseModel;
 import com.champlain.songservice.presentationlayer.SongRequestModel;
 import com.champlain.songservice.presentationlayer.SongResponseModel;
+import com.champlain.songservice.utils.exceptions.DuplicateSongTitleException;
 import com.champlain.songservice.utils.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -60,6 +61,10 @@ public class SongServiceImpl implements SongService {
     @Override
     public SongResponseModel addSong(SongRequestModel songRequestModel) {
         Song song = songRequestModelMapper.requestModelToEntity(songRequestModel);
+
+        if(getAllSongs().stream().anyMatch(s -> s.getTitle().equals(song.getTitle())))
+            throw new DuplicateSongTitleException("Title " + song.getTitle() + " already exists");
+
         for (String artistIdentifier : song.getArtists()) {
             if (artistServiceClient.getArtistById(artistIdentifier) == null)
                 throw new NotFoundException("artist with id " + artistIdentifier + " was not found");
@@ -75,12 +80,17 @@ public class SongServiceImpl implements SongService {
         Song oldSong = songRepository.findSongByIdentifier_SongId(songId);
         if (oldSong != null) {
             Song song = songRequestModelMapper.requestModelToEntity(songRequestModel);
+
             for (String artistIdentifier : song.getArtists()) {
                 if (artistServiceClient.getArtistById(artistIdentifier) == null)
                     throw new NotFoundException("artist with id " + artistIdentifier + " was not found");
             }
             song.setIdentifier(new SongIdentifier(songId));
             song.setId(oldSong.getId());
+
+            if(getAllSongs().stream().anyMatch(s -> s.getTitle().equals(song.getTitle()) && !s.getIdentifier().equals(song.getIdentifier().getSongId())))
+                throw new DuplicateSongTitleException("Title " + song.getTitle() + " already exists");
+
             SongResponseModel songResponseModel = songResponseModelMapper.entityToResponseModel(songRepository.save(song));
             addArtist(songResponseModel, song);
             return songResponseModel;

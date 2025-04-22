@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -52,5 +53,52 @@ public class ArtistRepositoryIntegrationTest {
 
         //assert
         assertEquals(sizeDB, artists.size());
+    }
+
+
+    @Test
+    public void whenAddArtist_ReturnArtist(){
+        Artist artist = new Artist();
+        artist.setFirstName("awdaw");
+        artist.setLastName("asdaw");
+        artist.setStageName("new stage name");
+        artist.setIdentifier(new ArtistIdentifier());
+
+        Artist savedArtist = artistRepository.save(artist);
+
+        assertNotNull(savedArtist);
+        assertEquals(artist.getId(), savedArtist.getId());
+        assertEquals(artist.getIdentifier().getArtistId(), savedArtist.getIdentifier().getArtistId());
+        assertEquals(artist.getFirstName(), savedArtist.getFirstName());
+        assertEquals(artist.getLastName(), savedArtist.getLastName());
+        assertEquals(artist.getStageName(), savedArtist.getStageName());
+    }
+
+    @Test
+    public void whenUpdateArtist_ReturnArtist(){
+        Artist foundArtist = artistRepository.findArtistByIdentifier_ArtistId(VALID_ARTIST_ID);
+
+        Artist artist = new Artist();
+        artist.setFirstName("awdaw");
+        artist.setLastName("asdaw");
+        artist.setStageName("new stage name");
+        artist.setIdentifier(foundArtist.getIdentifier());
+        artist.setId(foundArtist.getId());
+
+        Artist savedArtist = artistRepository.save(artist);
+
+        artistRepository.save(savedArtist);
+        assertEquals(artist.getId(), savedArtist.getId());
+        assertEquals(artist.getIdentifier().getArtistId(), savedArtist.getIdentifier().getArtistId());
+        assertEquals(artist.getFirstName(), savedArtist.getFirstName());
+        assertEquals(artist.getLastName(), savedArtist.getLastName());
+        assertEquals(artist.getStageName(), savedArtist.getStageName());
+    }
+
+    @Test
+    public void whenDeleteArtist_ReturnNull(){
+        artistRepository.delete(artistRepository.findArtistByIdentifier_ArtistId(VALID_ARTIST_ID));
+
+        assertNull(artistRepository.findArtistByIdentifier_ArtistId(VALID_ARTIST_ID));
     }
 }

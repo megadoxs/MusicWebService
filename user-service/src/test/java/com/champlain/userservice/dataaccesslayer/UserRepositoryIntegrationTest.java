@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,5 +52,63 @@ public class UserRepositoryIntegrationTest {
 
         //assert
         assertEquals(sizeDB, users.size());
+    }
+
+    @Test
+    public void whenAddUser_ReturnUser(){
+        User user = new User();
+        user.setFirstName("awdaw");
+        user.setLastName("asdaw");
+        user.setEmail("a@a.com");
+        user.setUserIdentifier(new UserIdentifier());
+        user.setDateOfBirth(new Date());
+        user.setPassword("awdawd");
+        user.setUsername("adwad");
+
+        User savedUser = userRepository.save(user);
+
+        assertNotNull(savedUser);
+        assertEquals(user.getId(), savedUser.getId());
+        assertEquals(user.getUserIdentifier().getUserId(), savedUser.getUserIdentifier().getUserId());
+        assertEquals(user.getFirstName(), savedUser.getFirstName());
+        assertEquals(user.getLastName(), savedUser.getLastName());
+        assertEquals(user.getEmail(), savedUser.getEmail());
+        assertEquals(user.getDateOfBirth(), savedUser.getDateOfBirth());
+        assertEquals(user.getPassword(), savedUser.getPassword());
+        assertEquals(user.getUsername(), savedUser.getUsername());
+    }
+
+    @Test
+    public void whenUpdateUser_ReturnUser(){
+        User foundUser = userRepository.findUserByUserIdentifier_UserId(VALID_USER_ID);
+
+        User user = new User();
+        user.setFirstName("awdaw");
+        user.setLastName("asdaw");
+        user.setEmail("a@a.com");
+        user.setUserIdentifier(foundUser.getUserIdentifier());
+        user.setDateOfBirth(new Date());
+        user.setPassword("awdawd");
+        user.setUsername("adwad");
+        user.setId(foundUser.getId());
+
+        User savedUser = userRepository.save(user);
+
+        userRepository.save(savedUser);
+        assertEquals(user.getId(), savedUser.getId());
+        assertEquals(user.getUserIdentifier().getUserId(), savedUser.getUserIdentifier().getUserId());
+        assertEquals(user.getFirstName(), savedUser.getFirstName());
+        assertEquals(user.getLastName(), savedUser.getLastName());
+        assertEquals(user.getEmail(), savedUser.getEmail());
+        assertEquals(user.getDateOfBirth(), savedUser.getDateOfBirth());
+        assertEquals(user.getPassword(), savedUser.getPassword());
+        assertEquals(user.getUsername(), savedUser.getUsername());
+    }
+
+    @Test
+    public void whenDeleteUser_ReturnNull(){
+        userRepository.delete(userRepository.findUserByUserIdentifier_UserId(VALID_USER_ID));
+
+        assertNull(userRepository.findUserByUserIdentifier_UserId(VALID_USER_ID));
     }
 }

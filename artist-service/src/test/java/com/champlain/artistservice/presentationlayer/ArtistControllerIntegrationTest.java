@@ -120,7 +120,7 @@ public class ArtistControllerIntegrationTest {
         ArtistRequestModel ArtistToCreate = ArtistRequestModel.builder()
                 .firstName(VALID_ARTIST_FIRST_NAME)
                 .lastName(VALID_ARTIST_LAST_NAME)
-                .stageName(VALID_ARTIST_STAGE_NAME)
+                .stageName("test123")
                 .build();
 
         webTestClient.post()
@@ -139,6 +139,25 @@ public class ArtistControllerIntegrationTest {
 
         long sizeDBAfter = artistRepository.count();
         assertEquals(sizeDB + 1, sizeDBAfter);
+    }
+
+    @Test
+    public void whenAddArtistWithDuplicateStageName_thenThrowDuplicateStageNameException() {
+        ArtistRequestModel ArtistToCreate = ArtistRequestModel.builder()
+                .firstName(VALID_ARTIST_FIRST_NAME)
+                .lastName(VALID_ARTIST_LAST_NAME)
+                .stageName(VALID_ARTIST_STAGE_NAME)
+                .build();
+
+        webTestClient.post()
+                .uri(BASE_URI_ARTISTS)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(ArtistToCreate)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.httpStatus").isEqualTo("BAD_REQUEST")
+                .jsonPath("$.message").isEqualTo("Stage name " + VALID_ARTIST_STAGE_NAME + " already exists.");
     }
 
     @Test
@@ -182,6 +201,25 @@ public class ArtistControllerIntegrationTest {
                     assertEquals(VALID_ARTIST_LAST_NAME, updatedArtist.getLastName());
                     assertEquals(VALID_ARTIST_STAGE_NAME, updatedArtist.getStageName());
                 });
+    }
+
+    @Test
+    public void whenUpdateArtistWithDuplicateStageName_thenThrowDuplicateStageNameException() {
+        ArtistRequestModel ArtistToUpdate = ArtistRequestModel.builder()
+                .firstName(VALID_ARTIST_FIRST_NAME)
+                .lastName(VALID_ARTIST_LAST_NAME)
+                .stageName("Eminem")
+                .build();
+
+        webTestClient.put()
+                .uri(BASE_URI_ARTISTS + "/" + VALID_ARTIST_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(ArtistToUpdate)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.httpStatus").isEqualTo("BAD_REQUEST")
+                .jsonPath("$.message").isEqualTo("Stage name " + "Eminem" + " already exists.");
     }
 
     @Test

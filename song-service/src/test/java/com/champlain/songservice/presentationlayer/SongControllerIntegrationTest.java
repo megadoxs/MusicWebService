@@ -133,7 +133,7 @@ public class SongControllerIntegrationTest {
         when(artistServiceClient.getArtistById(VALID_SONG_ARTIST_ID.getFirst())).thenReturn(new ArtistResponseModel());
 
         SongRequestModel SongToCreate = SongRequestModel.builder()
-                .title(VALID_SONG_NAME)
+                .title("new name")
                 .genre(Genre.valueOf(VALID_SONG_GENRE))
                 .releaseDate(VALID_SONG_RELEASE_DATE)
                 .duration(VALID_SONG_DURATION)
@@ -166,7 +166,7 @@ public class SongControllerIntegrationTest {
         when(artistServiceClient.getArtistById("some invalid artist id")).thenReturn(null);
 
         SongRequestModel SongToCreate = SongRequestModel.builder()
-                .title(VALID_SONG_NAME)
+                .title("new name")
                 .genre(Genre.valueOf(VALID_SONG_GENRE))
                 .releaseDate(VALID_SONG_RELEASE_DATE)
                 .duration(VALID_SONG_DURATION)
@@ -182,6 +182,31 @@ public class SongControllerIntegrationTest {
                 .expectBody()
                 .jsonPath("$.httpStatus").isEqualTo("NOT_FOUND")
                 .jsonPath("$.message").isEqualTo("artist with id " + "some invalid artist id" + " was not found");
+
+    }
+
+    @Test
+    public void whenAddSongWithDuplicateTitle_thenThrowDuplicateTitleException() {
+        //arrange
+        when(artistServiceClient.getArtistById("some invalid artist id")).thenReturn(null);
+
+        SongRequestModel SongToCreate = SongRequestModel.builder()
+                .title(VALID_SONG_NAME)
+                .genre(Genre.valueOf(VALID_SONG_GENRE))
+                .releaseDate(VALID_SONG_RELEASE_DATE)
+                .duration(VALID_SONG_DURATION)
+                .artists(List.of("some invalid artist id"))
+                .build();
+
+        webTestClient.post()
+                .uri(BASE_URI_SONGS)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(SongToCreate)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.httpStatus").isEqualTo("BAD_REQUEST")
+                .jsonPath("$.message").isEqualTo("Title " + VALID_SONG_NAME + " already exists");
 
     }
 
@@ -239,7 +264,7 @@ public class SongControllerIntegrationTest {
         when(artistServiceClient.getArtistById("some invalid artist id")).thenReturn(null);
 
         SongRequestModel SongToCreate = SongRequestModel.builder()
-                .title(VALID_SONG_NAME)
+                .title("new name")
                 .genre(Genre.valueOf(VALID_SONG_GENRE))
                 .releaseDate(VALID_SONG_RELEASE_DATE)
                 .duration(VALID_SONG_DURATION)
@@ -255,6 +280,31 @@ public class SongControllerIntegrationTest {
                 .expectBody()
                 .jsonPath("$.httpStatus").isEqualTo("NOT_FOUND")
                 .jsonPath("$.message").isEqualTo("artist with id " + "some invalid artist id" + " was not found");
+
+    }
+
+    @Test
+    public void whenUpdateSongWithDuplicateTitle_thenThrowDuplicateTitleException() {
+        //arrange
+        when(artistServiceClient.getArtistById(VALID_SONG_ARTIST_ID.getFirst())).thenReturn(new ArtistResponseModel());
+
+        SongRequestModel SongToCreate = SongRequestModel.builder()
+                .title("Lose Yourself")
+                .genre(Genre.valueOf(VALID_SONG_GENRE))
+                .releaseDate(VALID_SONG_RELEASE_DATE)
+                .duration(VALID_SONG_DURATION)
+                .artists(VALID_SONG_ARTIST_ID)
+                .build();
+
+        webTestClient.put()
+                .uri(BASE_URI_SONGS + "/" + VALID_SONG_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(SongToCreate)
+                .exchange()
+                .expectStatus().isBadRequest()
+                .expectBody()
+                .jsonPath("$.httpStatus").isEqualTo("BAD_REQUEST")
+                .jsonPath("$.message").isEqualTo("Title " + "Lose Yourself" + " already exists");
 
     }
 

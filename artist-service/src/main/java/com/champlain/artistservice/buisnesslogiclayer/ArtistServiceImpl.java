@@ -9,6 +9,7 @@ import com.champlain.artistservice.domainclientlayer.SongServiceClient;
 import com.champlain.artistservice.presentationlayer.ArtistRequestModel;
 import com.champlain.artistservice.presentationlayer.ArtistResponseModel;
 import com.champlain.artistservice.presentationlayer.SongResponseModel;
+import com.champlain.artistservice.utils.exceptions.DuplicateStageNameException;
 import com.champlain.artistservice.utils.exceptions.NotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -46,6 +47,10 @@ public class ArtistServiceImpl implements ArtistService {
     @Override
     public ArtistResponseModel addArtist(ArtistRequestModel artistRequestModel) {
         Artist artist = artistRequestModelMapper.requestModelToEntity(artistRequestModel);
+
+        if(getAllArtists().stream().anyMatch(a -> a.getStageName().equals(artist.getStageName())))
+            throw new DuplicateStageNameException("Stage name " + artist.getStageName() + " already exists.");
+
         artist.setIdentifier(new ArtistIdentifier());
         return artistResponseModelMapper.entityToResponseModel(artistRepository.save(artist));
     }
@@ -57,6 +62,10 @@ public class ArtistServiceImpl implements ArtistService {
             Artist artist = artistRequestModelMapper.requestModelToEntity(artistRequestModel);
             artist.setIdentifier(new ArtistIdentifier(artistId));
             artist.setId(oldArtist.getId());
+
+            if(getAllArtists().stream().anyMatch(a -> a.getStageName().equals(artist.getStageName()) && !a.getIdentifier().equals(artist.getIdentifier().getArtistId())))
+                throw new DuplicateStageNameException("Stage name " + artist.getStageName() + " already exists.");
+
             return artistResponseModelMapper.entityToResponseModel(artistRepository.save(artist));
         } else
             throw new NotFoundException("artist with id " + artistId + " was not found");

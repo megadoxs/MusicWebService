@@ -8,8 +8,7 @@ VALUES ('200e8400-e29b-41d4-a716-446655440020', '57659e81-7c6b-4711-bb9e-bc73e1f
        ('200e8400-e29b-41d4-a716-446655440026', '811a46fe-e4de-4790-ab84-1da7f4f2909f', 'Party Mix', '00:09:56'),
        ('200e8400-e29b-41d4-a716-446655440027', '811a46fe-e4de-4790-ab84-1da7f4f2909f', 'Throwback Jams', '00:08:47'),
        ('200e8400-e29b-41d4-a716-446655440028', '811a46fe-e4de-4790-ab84-1da7f4f2909f', 'Focus Mode', '00:08:03'),
-       ('200e8400-e29b-41d4-a716-446655440029', '811a46fe-e4de-4790-ab84-1da7f4f2909f', 'Morning Motivation',
-        '00:08:03');
+       ('200e8400-e29b-41d4-a716-446655440029', '811a46fe-e4de-4790-ab84-1da7f4f2909f', 'Morning Motivation','00:08:03');
 
 INSERT INTO playlist_songs (playlist_id, song_id)
 VALUES (1, '100e8400-e29b-41d4-a716-446655440010'),  -- Workout Hits - Shallow

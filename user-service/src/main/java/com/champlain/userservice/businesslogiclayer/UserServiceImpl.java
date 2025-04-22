@@ -8,6 +8,7 @@ import com.champlain.userservice.datamapperlayer.UserResponseMapper;
 import com.champlain.userservice.domainclientlayer.PlaylistServiceClient;
 import com.champlain.userservice.presentationlayer.UserRequestModel;
 import com.champlain.userservice.presentationlayer.UserResponseModel;
+import com.champlain.userservice.utils.exceptions.DuplicateUsernameException;
 import com.champlain.userservice.utils.exceptions.InvalidInputException;
 import com.champlain.userservice.utils.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +55,10 @@ public class UserServiceImpl implements UserService {
     public UserResponseModel addUser(UserRequestModel newUserData) {
         String pw1 = newUserData.getPassword1();
         String pw2 = newUserData.getPassword2();
+
+        if(getUsers().stream().anyMatch(u -> u.getUsername().equals(newUserData.getUsername())))
+            throw new DuplicateUsernameException("Username " + newUserData.getUsername() + " already exists.");
+
         if (pw1 == null || pw2 == null || pw1.isEmpty() || pw2.isEmpty())
             throw new InvalidInputException("password can't be empty.");
         else if (pw1.equals(pw2)) {
@@ -79,6 +84,10 @@ public class UserServiceImpl implements UserService {
                 user.setUserIdentifier(new UserIdentifier(userId));
                 user.setPassword(newUserData.getPassword1());
                 user.setId(oldUser.getId());
+
+                if(getUsers().stream().anyMatch(u -> u.getUsername().equals(newUserData.getUsername()) && !u.getUserId().equals(userId)))
+                    throw new DuplicateUsernameException("Username " + newUserData.getUsername() + " already exists.");
+
                 return this.userResponseMapper.entityToResponseModel(userRepository.save(user));
             } else
                 throw new InvalidInputException("passwords do not match.");

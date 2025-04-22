@@ -1,6 +1,6 @@
 package com.champlain.songservice.utils;
 
-import com.champlain.songservice.utils.exceptions.InvalidInputException;
+import com.champlain.songservice.utils.exceptions.DuplicateSongTitleException;
 import com.champlain.songservice.utils.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,19 +23,12 @@ public class GlobalControllerExceptionHandler {
     }
 
     @ResponseStatus(BAD_REQUEST)
-    @ExceptionHandler(InvalidInputException.class)
-    public HttpErrorInfo handleInvalidInputException(WebRequest request, Exception ex) {
+    @ExceptionHandler(DuplicateSongTitleException.class)
+    public HttpErrorInfo handleDuplicateSongTitleException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(BAD_REQUEST, request, ex);
     }
 
     private HttpErrorInfo createHttpErrorInfo(HttpStatus httpStatus, WebRequest request, Exception ex) {
-        final String path = request.getDescription(false);
-        // final String path = request.getPath().pathWithinApplication().value();
-        final String message = ex.getMessage();
-        log.debug("message is: " + message);
-
-        log.debug("Returning HTTP status: {} for path: {}, message: {}", httpStatus, path, message);
-
-        return new HttpErrorInfo(httpStatus, path, message);
+        return new HttpErrorInfo(httpStatus, request.getDescription(false), ex.getMessage());
     }
 }

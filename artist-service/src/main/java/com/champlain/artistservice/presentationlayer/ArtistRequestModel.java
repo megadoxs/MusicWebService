@@ -1,16 +1,14 @@
 package com.champlain.artistservice.presentationlayer;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ArtistRequestModel {
     private String firstName;
-    private String LastName;
+    private String lastName;
     private String stageName;
 }

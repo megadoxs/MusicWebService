@@ -1,6 +1,5 @@
 package com.champlain.artistservice.utils;
 
-import com.champlain.artistservice.utils.exceptions.DuplicateVinException;
 import com.champlain.artistservice.utils.exceptions.InvalidInputException;
 import com.champlain.artistservice.utils.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -10,8 +9,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @RestControllerAdvice
 @Slf4j
@@ -23,18 +22,11 @@ public class GlobalControllerExceptionHandler {
         return createHttpErrorInfo(NOT_FOUND, request, ex);
     }
 
-    @ResponseStatus(UNPROCESSABLE_ENTITY)
+    @ResponseStatus(BAD_REQUEST)
     @ExceptionHandler(InvalidInputException.class)
     public HttpErrorInfo handleInvalidInputException(WebRequest request, Exception ex) {
-        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
+        return createHttpErrorInfo(BAD_REQUEST, request, ex);
     }
-
-    @ResponseStatus(UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(DuplicateVinException.class)
-    public HttpErrorInfo handleDuplicateVinException(WebRequest request, Exception ex) {
-        return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
-    }
-
 
     private HttpErrorInfo createHttpErrorInfo(HttpStatus httpStatus, WebRequest request, Exception ex) {
         final String path = request.getDescription(false);

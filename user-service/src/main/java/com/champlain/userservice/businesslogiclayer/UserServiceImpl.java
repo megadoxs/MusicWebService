@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService {
             User user = this.userRepository.findUserByUserIdentifier_UserId(user_id);
             UserResponseModel result;
             if (user == null) {
-                throw new NotFoundException("User with " + user_id + " not found.");
+                throw new NotFoundException("User with userId: " + user_id + " not found.");
             } else {
                 result = this.userResponseMapper.entityToResponseModel(user);
             }
@@ -54,13 +54,9 @@ public class UserServiceImpl implements UserService {
     public UserResponseModel addUser(UserRequestModel newUserData) {
         String pw1 = newUserData.getPassword1();
         String pw2 = newUserData.getPassword2();
-        if (pw1 == null) {
-            pw1 = "";
-        }
-        if (pw2 == null) {
-            pw2 = "";
-        }
-        if (pw1.equals(pw2)) {
+        if (pw1 == null || pw2 == null || pw1.isEmpty() || pw2.isEmpty())
+            throw new InvalidInputException("password can't be empty.");
+        else if (pw1.equals(pw2)) {
             User user = this.userRequestMapper.requestModelToEntity(newUserData);
             user.setUserIdentifier(new UserIdentifier());
             user.setPassword(newUserData.getPassword1());
@@ -76,13 +72,9 @@ public class UserServiceImpl implements UserService {
         if (oldUser != null) {
             String pw1 = newUserData.getPassword1();
             String pw2 = newUserData.getPassword2();
-            if (pw1 == null) {
-                pw1 = "";
-            }
-            if (pw2 == null) {
-                pw2 = "";
-            }
-            if (pw1.equals(pw2)) {
+            if (pw1 == null || pw2 == null || pw1.isEmpty() || pw2.isEmpty())
+                throw new InvalidInputException("password can't be empty.");
+            else if (pw1.equals(pw2)) {
                 User user = this.userRequestMapper.requestModelToEntity(newUserData);
                 user.setUserIdentifier(new UserIdentifier(userId));
                 user.setPassword(newUserData.getPassword1());
@@ -91,7 +83,7 @@ public class UserServiceImpl implements UserService {
             } else
                 throw new InvalidInputException("passwords do not match.");
         } else
-            throw new NotFoundException("User with " + userId + " not found.");
+            throw new NotFoundException("User with userId: " + userId + " not found.");
     }
 
 
@@ -99,7 +91,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUserbyUserId(String userId) {
         User foundUser = this.userRepository.findUserByUserIdentifier_UserId(userId);
         if (foundUser == null)
-            throw new NotFoundException("User with " + userId + " not found.");
+            throw new NotFoundException("User with userId: " + userId + " not found.");
         else{
             userRepository.delete(foundUser);
             playlistServiceClient.deletePlaylistsByUserId(userId);

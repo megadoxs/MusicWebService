@@ -8,7 +8,8 @@ COPY settings.gradle.kts .
 COPY src src
 
 # Build without daemon and parallelization to avoid permission issues
-RUN ./gradlew bootJar --no-daemon --no-parallel
+RUN chmod +x ./gradlew
+RUN ./gradlew bootJar --no-daemon --no-parallel --debug
 
 FROM openjdk:21-jdk-slim
 COPY --from=builder /build/build/libs/*.jar app.jar

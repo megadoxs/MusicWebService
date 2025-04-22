@@ -16,10 +16,10 @@ spring:
   #    activate:
   #      on-profile: default
   datasource:
-    url: jdbc:postgresql://postgres:5432/user-db
+    url: jdbc:mysql://mysql1/user-db
     username: user
     password: pwd
-    driver-class-name: org.postgresql.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:
@@ -31,7 +31,7 @@ spring:
 
   sql:
     init:
-      platform: postgres
+      platform: mysql
       mode: always
       logging:
         enabled: true

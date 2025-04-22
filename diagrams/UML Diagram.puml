@@ -65,6 +65,9 @@ Package "Playlist Management Sub-Domain" <<Rectangle>> #C8E6C9 {
 
 }
 
+note top of "Playlist Management Sub-Domain"
+<<AGGREGATING SUBDOMAIN>>
+end note
 
 ' Relationships
 User o- UserIdentifier

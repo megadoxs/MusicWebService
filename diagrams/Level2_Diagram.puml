@@ -2,48 +2,47 @@
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
 
 LAYOUT_WITH_LEGEND()
-AddElementTag("microService", $shape=EightSidedShape(), $bgColor="CornflowerBlue", $fontColor="white", $legendText="micro service\neight sided")
-AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="lightSkyBlue", $fontColor="white")
+AddElementTag("microService", $shape=EightSidedShape(), $bgColor="CornflowerBlue", $fontColor="white", $legendText="micro service\nEight sided")
+AddElementTag("storage", $shape=RoundedBoxShape(), $bgColor="lightSkyBlue", $fontColor="white", $legendText="storage\nRounded box")
 
 SHOW_PERSON_OUTLINE()
 
-title System Context diagram for Music Listening Platform.
+title Level 2 – System Context Diagram for Music Listening Platform
 
-Person(user, "User", "A user of the Music Listening Platform.")
-
+Person(user, "User", "A user of the music listening platform.")
 
 System_Boundary(c1, "Music Listening Platform") {
-    Container(web_app, "Web Application", "Java, Spring MVC", "Delivers the static content and the Internet banking SPA")
-    Container(spa, "Single-Page App", "JavaScript, Angular", "Provides all the Internet banking functionality to customers via their web browser")
-    Container(api_gateway, "API-gateway", "Java, Docker Container", "Provides Internet banking functionality via API")
-    Container(as, "artist-service", "Java, Docker Container", "Provides Internet banking functionality via API")
-    Container(ss, "song-service", "Java, Docker Container", "Provides Internet banking functionality via API")
-    Container(us, "user-service", "Java, Docker Container", "Provides Internet banking functionality via API")
-    Container(ps, "playlist-service", "Java, Docker Container", "Provides Internet banking functionality via API")
-ContainerDb(artist_db, "artist-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
-ContainerDb(song_db, "song-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
-ContainerDb(user_db, "user-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
-ContainerDb(play_db, "playlist-db", "MySQL", "Stores a normalized version of all business data for ad hoc reporting purposes", $tags = "storage")
+    Container(webApp, "Web Application", "Java, Spring MVC", "Serves static HTML, CSS, and JavaScript for the music application")
+    Container(spaApp, "Single-Page App", "JavaScript, Angular", "Client-side music interface loaded in the browser")
+    Container(apiGateway, "API Gateway", "Java, Spring Cloud Gateway, Docker", "Routes and aggregates requests to backend microservices", $tags="microService")
+    Container(artistSvc, "Artist Service", "Java, Spring Boot, Docker", "Manages artist data and metadata", $tags="microService")
+    Container(songSvc, "Song Service", "Java, Spring Boot, Docker", "Manages song catalog and metadata", $tags="microService")
+    Container(userSvc, "User Service", "Java, Spring Boot, Docker", "Manages user profiles and authentication", $tags="microService")
+    Container(playlistSvc, "Playlist Service", "Java, Spring Boot, Docker", "Handles user playlists and song associations", $tags="microService")
+    ContainerDb(artistDb, "artist-db", "MySQL", "Stores artist records", $tags="storage")
+    ContainerDb(songDb, "song-db", "MySQL", "Stores songs and artist relationships", $tags="storage")
+    ContainerDb(userDb, "user-db", "PostgreSQL", "Stores user profiles and credentials", $tags="storage")
+    ContainerDb(playlistDb, "playlist-db", "MySQL", "Stores playlists and song links", $tags="storage")
 }
 
-Rel_Neighbor(web_app, spa, "Delivers")
-Rel(spa, api_gateway, "Uses", "async, JSON/HTTPS")
+Rel(user, webApp, "Uses", "HTTPS")
+Rel(user, spaApp, "Uses", "HTTPS")
 
-Rel(user, web_app, "Uses", "HTTPS")
-Rel(user, spa, "Uses", "HTTPS")
-Rel(api_gateway, as, "Uses", "HTTPS")
-Rel(api_gateway, ss, "Uses", "HTTPS")
-Rel(api_gateway, us, "Uses", "HTTPS")
-Rel(api_gateway, ps, "Uses", "HTTPS")
+Rel(webApp, spaApp, "Serves SPA", "HTTPS/HTML")
 
-Rel(ps, ss, "Uses", "HTTPS")
-Rel(ps, us, "Uses", "HTTPS")
-Rel(ss, as, "Uses", "HTTPS")
+Rel(spaApp, apiGateway, "Sends API requests to", "HTTPS/JSON")
+Rel(apiGateway, artistSvc, "Forwards artist requests to", "HTTPS/JSON")
+Rel(apiGateway, songSvc, "Forwards song requests to", "HTTPS/JSON")
+Rel(apiGateway, userSvc, "Forwards user requests to", "HTTPS/JSON")
+Rel(apiGateway, playlistSvc, "Forwards playlist requests to", "HTTPS/JSON")
 
+Rel(playlistSvc, songSvc, "Queries song metadata from", "HTTPS/JSON")
+Rel(playlistSvc, userSvc, "Validates user from", "HTTPS/JSON")
+Rel(songSvc, artistSvc, "Queries artist metadata from", "HTTPS/JSON")
 
-Rel_D(ps, play_db, "reads ...", "JDBC/SQL/TCP")
-Rel_D(ss, song_db, "reads ...", "JDBC/SQL/TCP")
-Rel_D(us, user_db, "reads ...", "JDBC/SQL/TCP")
-Rel_D(as, artist_db, "reads ...", "JDBC/SQL/TCP")
+Rel_D(artistSvc, artistDb, "Reads from and writes to", "JDBC/SQL")
+Rel_D(songSvc, songDb, "Reads from and writes to", "JDBC/SQL")
+Rel_D(userSvc, userDb, "Reads from and writes to", "JDBC/SQL")
+Rel_D(playlistSvc, playlistDb, "Reads from and writes to", "JDBC/SQL")
 
 @enduml

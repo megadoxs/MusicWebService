@@ -3,9 +3,11 @@ hide circle
 top to bottom direction
 'left to right direction
 
+!define AGGREGATE_ROOT_SUBDOMAIN(aggregateRootSubDomainName) package aggregateRootSubDomainName << Aggregate Root >> << Sub-Domain >>
 !define ENTITY(entityName) class entityName << Entity >>
 !define VALUE_OBJECT(valueObjectName) class valueObjectName << Value Object >>
 !define AGGREGATE_ROOT_ENTITY(aggregateRootEntityName) class aggregateRootEntityName << Aggregate Root >> << Entity >>
+
 
 Package "User Management Sub-Domain" <<Rectangle>> #FFCDD2 {
     AGGREGATE_ROOT_ENTITY(User) #FFCDD2 {

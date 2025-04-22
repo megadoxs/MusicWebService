@@ -13,6 +13,6 @@ import org.springframework.hateoas.RepresentationModel;
 public class ArtistResponseModel extends RepresentationModel<ArtistResponseModel> {
     private String identifier;
     private String firstName;
-    private String LastName;
+    private String lastName;
     private String stageName;
 }

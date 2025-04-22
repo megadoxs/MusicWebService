@@ -1,18 +1,16 @@
 package com.champlain.artistservice.presentationlayer;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ArtistResponseModel extends RepresentationModel<ArtistResponseModel> {
     private String identifier;
     private String firstName;
-    private String LastName;
+    private String lastName;
     private String stageName;
 }

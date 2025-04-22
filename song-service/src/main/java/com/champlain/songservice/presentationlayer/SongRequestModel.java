@@ -1,10 +1,7 @@
 package com.champlain.songservice.presentationlayer;
 
 import com.champlain.songservice.dataaccesslayer.Genre;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -14,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class SongRequestModel {
     private List<String> artists;
     private String title;

@@ -1,10 +1,7 @@
 package com.champlain.songservice.presentationlayer;
 
 import com.fasterxml.jackson.annotation.JsonSetter;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.util.List;
@@ -14,6 +11,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class PlaylistResponseModel extends RepresentationModel<PlaylistResponseModel> {
     private String identifier;
     private String name;

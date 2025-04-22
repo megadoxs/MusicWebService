@@ -1,17 +1,17 @@
-# Build stage: Use Maven with OpenJDK 17 for ARM support
-FROM maven:3.9.5-eclipse-temurin-17 AS builder
+FROM gradle:8.5-jdk21 AS builder
 WORKDIR /build
 
-# Copy pom and source code
-COPY pom.xml .
-COPY src ./src
+COPY gradlew .
+COPY gradle gradle
+COPY build.gradle.kts .
+COPY settings.gradle.kts .
+COPY src src
 
-# Download dependencies and build the JAR
-RUN mvn clean package -DskipTests
+# Build without daemon and parallelization to avoid permission issues
+RUN ./gradlew bootJar --no-daemon --no-parallel
 
-# Run stage: Use ARM-compatible OpenJDK 17 Alpine image
-FROM eclipse-temurin:17-jdk
-COPY --from=builder /build/target/*.jar app.jar
+FROM openjdk:21-jdk-slim
+COPY --from=builder /build/build/libs/*.jar app.jar
 
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app.jar"]

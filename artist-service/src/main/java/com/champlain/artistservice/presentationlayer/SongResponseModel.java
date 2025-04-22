@@ -1,9 +1,6 @@
 package com.champlain.artistservice.presentationlayer;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.sql.Time;
@@ -15,6 +12,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class SongResponseModel extends RepresentationModel<SongResponseModel> {
     private String identifier;
     private List<ArtistResponseModel> artists;

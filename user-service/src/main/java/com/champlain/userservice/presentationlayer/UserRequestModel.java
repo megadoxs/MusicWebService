@@ -10,6 +10,7 @@ import java.util.Date;
 @Getter
 @Setter
 @Data
+@Builder
 public class UserRequestModel {
     private String username;
     private String lastName;

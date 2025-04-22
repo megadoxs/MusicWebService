@@ -1,29 +1,67 @@
 services:
+  postgres:
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=user-db
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=pwd
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - ./user-service/src/main/resources/data-postgresql.sql:/docker-entrypoint-initdb.d/schema-postgresql.sql
+      - ./user-service/src/main/resources/schema-postgresql.sql:/docker-entrypoint-initdb.d/data-postgresql.sql
+#      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD","pg_isready", "-U",  "user", "-d", "user-db" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@domain.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    # Define named volumes for persistent data storage
+
+
   user-service:
     build: user-service
     hostname: userservicehost
     ports:
       - "8081:8080"
-    #    environment:
-    #      - SPRING_PROFILES_ACTIVE=docker
-    depends_on:
-      mysql1:
-        condition: service_healthy
-
-  mysql1:
-    image: 'mysql:latest'
     environment:
-      - 'MYSQL_DATABASE=user-db'
-      - 'MYSQL_USER=user'
-      - 'MYSQL_PASSWORD=pwd'
-      - 'MYSQL_ROOT_PASSWORD=verysecretpwd'
-    ports:
-      - "3307:3306"
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
-      interval: 10s
-      timeout: 5s
-      retries: 10
+      #      - SPRING_PROFILES_ACTIVE=docker
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/user-db
+      - SPRING_DATASOURCE_USERNAME=user
+      - SPRING_DATASOURCE_PASSWORD=pwd
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=org.postgresql.Driver
+      - SPRING_JPA_DATABASE_PLATFORM=org.hibernate.dialect.PostgreSQLDialect
+    depends_on:
+      postgres:
+        condition: service_healthy
+#
+#  mysql1:
+#    image: 'mysql:latest'
+#    environment:
+#      - 'MYSQL_DATABASE=user-db'
+#      - 'MYSQL_USER=user'
+#      - 'MYSQL_PASSWORD=pwd'
+#      - 'MYSQL_ROOT_PASSWORD=verysecretpwd'
+#    ports:
+#      - "3307:3306"
+#    healthcheck:
+#      test: [ "CMD", "mysqladmin", "ping", "-uuser", "-ppwd", "-h", "localhost" ]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 10
 
   artist-service:
     #    build: employees-service
@@ -127,7 +165,7 @@ services:
     environment:
       - PMA_ARBITRARY=1
     depends_on:
-      - mysql1
+#      - mysql1
       - mysql2
       - mysql3
       - mysql4
@@ -135,3 +173,9 @@ services:
       - default
 
 
+volumes:
+  pgdata:
+  # Create a volume named "logs" for storing application
+  logs:
+  # Create a volume named "db_data" for storing MySQL
+  db_data:

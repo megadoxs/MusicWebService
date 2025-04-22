@@ -46,6 +46,9 @@ dependencies {
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+
+    implementation("org.postgresql:postgresql:42.6.0") // Use the latest version
+
 }
 
 

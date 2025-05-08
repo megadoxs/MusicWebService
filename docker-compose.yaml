@@ -25,7 +25,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: admin@domain.com
       PGADMIN_DEFAULT_PASSWORD: admin
     ports:
-      - "5050:80"
+      - "5051:80"
     depends_on:
       postgres:
         condition: service_healthy
@@ -63,12 +63,7 @@ services:
 #      timeout: 5s
 #      retries: 10
 
-  artist-service:
-    build: artist-service
-    hostname: artistservicehost
-    depends_on:
-      mongo:
-        condition: service_healthy
+
 
   mongo:
     image: mongo
@@ -92,10 +87,20 @@ services:
     restart: always
     ports:
       - 5050:5050
+    depends_on:
+      mongo:
+        condition: service_healthy
     environment:
       - ME_CONFIG_MONGODB_ADMINUSERNAME=user
       - ME_CONFIG_MONGODB_ADMINPASSWORD=pwd
       - ME_CONFIG_MONGODB_SERVER=mongo #
+
+  artist-service:
+    build: artist-service
+    hostname: artistservicehost
+    depends_on:
+      mongo:
+        condition: service_healthy
 
   song-service:
     build: song-service

@@ -2,6 +2,7 @@ server:
   port: 8080
   error:
     include-message: always
+
 logging:
   level:
     root: INFO
@@ -11,9 +12,14 @@ logging:
 spring:
   application:
     name: artist-service
-  #  config:
-  #    activate:
-  #      on-profile: default
+
+---
+
+# Default profile (real MongoDB)
+spring:
+  config:
+    activate:
+      on-profile: default
   data:
     mongodb:
       username: user
@@ -24,32 +30,24 @@ spring:
       authentication-database: admin
       auto-index-creation: true
 
-  de:
-    flapdoodle:
-      mongodb:
-        embedded:
-          version: 5.0.5
 app:
   song-service:
     host: songservicehost
     port: 8080
 
 ---
-#for h2
+
+# Test profile (embedded MongoDB)
 spring:
   config:
     activate:
-      on-profile: h2  # Profile remains the same
+      on-profile: test-profile
   data:
+    mongodb:
+      database: artist-db
+
+de:
+  flapdoodle:
     mongodb:
       embedded:
         version: 5.0.5
-        bind-ip: localhost
-        port: 27017
-        database: artist-db
-
-  de:
-    flapdoodle:
-      mongodb:
-        embedded:
-          version: 4.20.0

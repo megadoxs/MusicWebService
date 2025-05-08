@@ -19,7 +19,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @SpringBootTest(webEnvironment = RANDOM_PORT, properties = {"spring.data.mongodb.database=artist-db"})
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-@ActiveProfiles("h2")
+@ActiveProfiles("test-profile")
 public class ArtistControllerIntegrationTest {
     private final String BASE_URI_ARTISTS = "/api/v1/artists";
     private final String VALID_ARTIST_ID = "550e8400-e29b-41d4-a716-446655440000";

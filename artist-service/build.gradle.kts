@@ -46,56 +46,56 @@ dependencies {
 }
 
 
-//tasks.withType<Test> {
-//    useJUnitPlatform()
-//}
-//
-//tasks.jacocoTestReport {
-//    dependsOn(tasks.test) // Ensure tests run before report
-//
-//    reports {
-//        xml.required.set(false)
-//        csv.required.set(false)
-//        html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
-//    }
-//
-//    classDirectories.setFrom(
-//        files(classDirectories.files.map {
-//            fileTree(it) {
-//                exclude("**/com/champlain/**/domainclientlayer/**")
-//            }
-//        })
-//    )
-//}
-//
-//tasks.jacocoTestCoverageVerification {
-//    violationRules {
-//        rule {
-//            limit {
-//                minimum = "0.5".toBigDecimal()
-//            }
-//        }
-//        rule {
-//            isEnabled = false
-//            element = "CLASS"
-//            includes = listOf("org.gradle.*")
-//            limit {
-//                counter = "LINE"
-//                value = "TOTALCOUNT"
-//                maximum = "0.3".toBigDecimal()
-//            }
-//        }
-//    }
-//
-//    classDirectories.setFrom(
-//        files(classDirectories.files.map {
-//            fileTree(it) {
-//                exclude("**/com/champlain/**/domainclientlayer/**")
-//            }
-//        })
-//    )
-//}
-//
-//tasks.test {
-//    finalizedBy(tasks.jacocoTestReport)
-//}
+tasks.withType<Test> {
+    useJUnitPlatform()
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test) // Ensure tests run before report
+
+    reports {
+        xml.required.set(false)
+        csv.required.set(false)
+        html.outputLocation.set(layout.buildDirectory.dir("jacocoHtml"))
+    }
+
+    classDirectories.setFrom(
+        files(classDirectories.files.map {
+            fileTree(it) {
+                exclude("**/com/champlain/**/domainclientlayer/**")
+            }
+        })
+    )
+}
+
+tasks.jacocoTestCoverageVerification {
+    violationRules {
+        rule {
+            limit {
+                minimum = "0.5".toBigDecimal()
+            }
+        }
+        rule {
+            isEnabled = false
+            element = "CLASS"
+            includes = listOf("org.gradle.*")
+            limit {
+                counter = "LINE"
+                value = "TOTALCOUNT"
+                maximum = "0.3".toBigDecimal()
+            }
+        }
+    }
+
+    classDirectories.setFrom(
+        files(classDirectories.files.map {
+            fileTree(it) {
+                exclude("**/com/champlain/**/domainclientlayer/**")
+            }
+        })
+    )
+}
+
+tasks.test {
+    finalizedBy(tasks.jacocoTestReport)
+}

@@ -32,7 +32,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-validation")
 
     // MySQL and H2 (runtime-only)
-    runtimeOnly("com.mysql:mysql-connector-j")
+//    runtimeOnly("com.mysql:mysql-connector-j")
     runtimeOnly("com.h2database:h2")
 
     // Lombok (compile-only + annotation processor)
@@ -47,7 +47,7 @@ dependencies {
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
 
-    implementation("org.postgresql:postgresql:42.6.0") // Use the latest version
+    implementation("org.postgresql:postgresql:42.7.2") // Use the latest version
 
 }
 

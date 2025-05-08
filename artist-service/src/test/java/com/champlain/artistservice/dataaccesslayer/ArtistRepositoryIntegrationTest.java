@@ -2,16 +2,14 @@ package com.champlain.artistservice.dataaccesslayer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 
-import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DataJpaTest
+@DataMongoTest
 public class ArtistRepositoryIntegrationTest {
     private final String VALID_ARTIST_ID = "550e8400-e29b-41d4-a716-446655440000";
     private final String NOT_FOUND_ARTIST_ID = "100e8400-e29b-41d4-a716-44665544001";

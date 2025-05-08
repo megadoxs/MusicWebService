@@ -7,7 +7,6 @@ logging:
     root: INFO
     org.springframework.web: DEBUG
     com.champlain: TRACE
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
 
 spring:
   application:
@@ -15,26 +14,21 @@ spring:
   #  config:
   #    activate:
   #      on-profile: default
-  datasource:
-    url: jdbc:mysql://mysql2/artist-db
-    username: user
-    password: pwd
-    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    mongodb:
+      username: user
+      password: pwd
+      host: localhost
+      port: 27017
+      database: artist-db
+      authentication-database: admin
+      auto-index-creation: true
 
-  jpa:
-    hibernate:
-      ddl-auto: none
-    show-sql: true
-    properties:
-      hibernate:
-        format_sql: true
-
-  sql:
-    init:
-      platform: mysql
-      mode: always
-      logging:
-        enabled: true
+  de:
+    flapdoodle:
+      mongodb:
+        embedded:
+          version: 5.0.5
 app:
   song-service:
     host: songservicehost
@@ -45,25 +39,17 @@ app:
 spring:
   config:
     activate:
-      on-profile: h2
-  h2:
-    console:
-      enabled: true
-  datasource:
-    url: jdbc:h2:mem:artist-db;DB_CLOSE_DELAY=-1;NON_KEYWORDS=YEAR
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
-  jpa:
-    show-sql: true
-    hibernate:
-      ddl-auto: create-drop         #let jpa create the schema
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.H2Dialect
-        auto-quote-keyword: true
-    defer-datasource-initialization: true  #turn this on to ensure that hibernate initializes the schema before loading the data
-sql:
-  init:
-    platform: h2
-    mode: embedded
+      on-profile: h2  # Profile remains the same
+  data:
+    mongodb:
+      embedded:
+        version: 5.0.5
+        bind-ip: localhost
+        port: 27017
+        database: artist-db
+
+  de:
+    flapdoodle:
+      mongodb:
+        embedded:
+          version: 4.20.0

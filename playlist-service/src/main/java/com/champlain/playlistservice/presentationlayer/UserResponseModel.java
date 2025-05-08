@@ -1,15 +1,13 @@
 package com.champlain.playlistservice.presentationlayer;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class UserResponseModel extends RepresentationModel<SongResponseModel> {
     private String userId;
     private String username;

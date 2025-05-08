@@ -12,32 +12,38 @@ logging:
 spring:
   application:
     name: user-service
-  #  config:
-  #    activate:
-  #      on-profile: default
+
+#  datasource:
+#    url: jdbc:mysql://mysql1/user-db
+#    username: user
+#    password: pwd
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#
   datasource:
-    url: jdbc:mysql://mysql1/user-db
+    url: jdbc:postgresql://postgres:5432/user-db
     username: user
     password: pwd
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
       ddl-auto: none
-    show-sql: true
+#    show-sql: true
     properties:
       hibernate:
-        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect #Remove this line if using mysql
+#        format_sql: true
 
   sql:
     init:
-      platform: mysql
+#      platform: mysql
+      platform: postgres
       mode: always
-      logging:
-        enabled: true
+#      logging:
+#        enabled: true
 app:
   playlist-service:
-    host: playlistservicehost
+    host: playlist-service
     port: 8080
 
 ---

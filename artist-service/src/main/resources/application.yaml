@@ -51,3 +51,8 @@ de:
     mongodb:
       embedded:
         version: 5.0.5
+
+app:
+  song-service:
+    host: localhost
+    port: 8080

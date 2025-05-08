@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @DataMongoTest
 public class ArtistRepositoryIntegrationTest {
     private final String VALID_ARTIST_ID = "550e8400-e29b-41d4-a716-446655440000";
+    private final String VALID_ARTIST_ID_2 = "550e8400-e29b-41d4-a716-446655440001";
+    private final String VALID_ARTIST_ID_3 = "550e8400-e29b-41d4-a716-446655440002";
     private final String NOT_FOUND_ARTIST_ID = "100e8400-e29b-41d4-a716-44665544001";
     private final String VALID_ARTIST_FIRST_NAME = "Stefani";
     private final String VALID_ARTIST_LAST_NAME = "Germanotta";
@@ -76,7 +79,7 @@ public class ArtistRepositoryIntegrationTest {
 
     @Test
     public void whenUpdateArtist_ReturnArtist(){
-        Artist foundArtist = artistRepository.findArtistByIdentifier_ArtistId(VALID_ARTIST_ID);
+        Artist foundArtist = artistRepository.findArtistByIdentifier_ArtistId(VALID_ARTIST_ID_2);
 
         Artist artist = new Artist();
         artist.setFirstName("awdaw");
@@ -97,8 +100,8 @@ public class ArtistRepositoryIntegrationTest {
 
     @Test
     public void whenDeleteArtist_ReturnNull(){
-        artistRepository.delete(artistRepository.findArtistByIdentifier_ArtistId(VALID_ARTIST_ID));
+        artistRepository.delete(artistRepository.findArtistByIdentifier_ArtistId(VALID_ARTIST_ID_3));
 
-        assertNull(artistRepository.findArtistByIdentifier_ArtistId(VALID_ARTIST_ID));
+        assertNull(artistRepository.findArtistByIdentifier_ArtistId(VALID_ARTIST_ID_3));
     }
 }

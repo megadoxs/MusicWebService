@@ -2,16 +2,11 @@ package com.champlain.playlistservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest()
+@ActiveProfiles("h2")
 class PlaylistServiceApplicationTests {
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
 
     @Test
     void contextLoads() {

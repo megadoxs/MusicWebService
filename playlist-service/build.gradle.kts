@@ -46,6 +46,7 @@ dependencies {
     // Testing
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
+    implementation ("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 }
 
 

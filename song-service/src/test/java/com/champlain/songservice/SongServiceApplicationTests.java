@@ -2,18 +2,11 @@ package com.champlain.songservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest
 @ActiveProfiles("h2")
 class SongServiceApplicationTests {
-
-    @Bean
-    public RestTemplate restTemplate() {
-        return new RestTemplate();
-    }
     @Test
     void contextLoads() {
     }

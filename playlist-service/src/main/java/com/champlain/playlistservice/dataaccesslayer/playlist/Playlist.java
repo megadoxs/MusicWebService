@@ -20,7 +20,7 @@ public class Playlist {
     @Embedded
     private PlaylistIdentifier identifier;
     private String name;
-    @Column(name = "`user`")
+    @Column(name = "user_id")
     private String user;
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "playlist_songs", joinColumns = @JoinColumn(name = "playlist_id"))

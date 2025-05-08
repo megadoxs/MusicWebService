@@ -1,4 +1,4 @@
-INSERT INTO playlists (playlist_id, `user`, name, duration)
+INSERT INTO playlists (playlist_id, user_id, name, duration)
 VALUES ('200e8400-e29b-41d4-a716-446655440020', '57659e81-7c6b-4711-bb9e-bc73e1fa7824', 'Workout Hits', '00:08:01'),
        ('200e8400-e29b-41d4-a716-446655440021', '57659e81-7c6b-4711-bb9e-bc73e1fa7824', 'Chill Vibes', '00:07:49'),
        ('200e8400-e29b-41d4-a716-446655440022', '57659e81-7c6b-4711-bb9e-bc73e1fa7824', 'Hip Hop Bangers', '00:08:04'),

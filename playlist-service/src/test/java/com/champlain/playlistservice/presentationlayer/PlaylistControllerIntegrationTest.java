@@ -3,10 +3,13 @@ package com.champlain.playlistservice.presentationlayer;
 import com.champlain.playlistservice.dataaccesslayer.playlist.PlaylistRepository;
 import com.champlain.playlistservice.dataaccesslayer.song.Genre;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -21,16 +24,14 @@ import java.sql.Time;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
 import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
 
-//@SpringBootTest()
-@SpringBootTest(webEnvironment = RANDOM_PORT,
- properties = {"spring.datasource.url=jdbc:h2:mem:playlists-db"})
-//@Sql({"/data-h2.sql"})
+@SpringBootTest(webEnvironment = RANDOM_PORT, properties = {"spring.datasource.url=jdbc:h2:mem:playlist-db"})
 @ActiveProfiles("h2")
 public class PlaylistControllerIntegrationTest {
 
@@ -38,23 +39,25 @@ public class PlaylistControllerIntegrationTest {
     WebTestClient webTestClient;
 
     @Autowired
-    RestTemplate restTemplate;
-
-    @Autowired
     PlaylistRepository playlistRepository;
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    ObjectMapper mapper;
+
+    RestTemplate restTemplate;
+
     private MockRestServiceServer mockRestServiceServer;
     @BeforeEach
     public void init() {
-//Attach MockRestServiceServer to the RestTemplate used in your client.
-        mockRestServiceServer = MockRestServiceServer.createServer(restTemplate);
+    //Attach MockRestServiceServer to the RestTemplate used in your client.
+        restTemplate = new RestTemplate();
+        mockRestServiceServer = MockRestServiceServer.bindTo(restTemplate).ignoreExpectOrder(true).build();
     }
 
     @Test
     public void testGetAllPlaylist() throws Exception {
         // ARRANGE step
-        String playlistId = "123e4567-e89b-12d3-a456-556642440000";
+        String playlistId = "200e8400-e29b-41d4-a716-446655440020";
         String songId = "100e8400-e29b-41d4-a716-446655440010";
         String artistId = "550e8400-e29b-41d4-a716-446655440000";
         String userId = "c27242a2-abb9-45b2-a85d-ed9ffa15f92c";
@@ -75,15 +78,6 @@ public class PlaylistControllerIntegrationTest {
                 .firstName("Alice")
                 .lastName("Johnson")
                 .username("alicej95")
-                .build();
-
-        List<SongResponseModel> songs = new ArrayList<>();
-
-        PlaylistResponseModel playlistResponseModel = PlaylistResponseModel.builder()
-                .identifier(playlistId)
-                .name("Top Hits")
-                .user(userResponseModel)
-                .songs(songs)
                 .build();
 
         // MOCK song-service
@@ -124,8 +118,6 @@ public class PlaylistControllerIntegrationTest {
                 .jsonPath("$.songs[0].releaseDate").isEqualTo("2018-09-27")
                 .jsonPath("$.songs[0].duration").isEqualTo("00:03:35")
                 .jsonPath("$.songs[0].artist.name").isEqualTo("Lady Gaga");
-
-//                    artistId, "Lady Gaga", "lady.gaga@example.com", "1986-03-28");
 
         // VERIFY that the RestTemplate calls were made as expected
         this.mockRestServiceServer.verify();

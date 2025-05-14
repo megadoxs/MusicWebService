@@ -69,7 +69,3 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
         auto-quote-keyword: true
     defer-datasource-initialization: true  #turn this on to ensure that hibernate initializes the schema before loading the data
-sql:
-  init:
-    platform: h2
-    mode: embedded

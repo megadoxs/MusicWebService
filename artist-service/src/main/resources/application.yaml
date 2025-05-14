@@ -24,7 +24,7 @@ spring:
     mongodb:
       username: user
       password: pwd
-      host: localhost
+      host: mongo
       port: 27017
       database: artist-db
       authentication-database: admin

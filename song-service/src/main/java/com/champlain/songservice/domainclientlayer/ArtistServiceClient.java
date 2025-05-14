@@ -17,8 +17,8 @@ public class ArtistServiceClient {
     private final RestTemplate restTemplate;
     private final String CLIENT_SERVICE_BASE_URL;
 
-    public ArtistServiceClient(RestTemplateBuilder restTemplate, @Value("${app.artist-service.host}") String artistServiceHost, @Value("${app.artist-service.port}") String artistsServicePort) {
-        this.restTemplate = restTemplate.build();
+    public ArtistServiceClient(RestTemplate restTemplate, @Value("${app.artist-service.host}") String artistServiceHost, @Value("${app.artist-service.port}") String artistsServicePort) {
+        this.restTemplate = restTemplate;
         CLIENT_SERVICE_BASE_URL = "http://" + artistServiceHost + ":" + artistsServicePort + "/api/v1/artists";
     }
 

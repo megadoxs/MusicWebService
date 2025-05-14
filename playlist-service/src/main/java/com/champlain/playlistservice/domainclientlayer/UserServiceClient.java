@@ -17,8 +17,8 @@ public class UserServiceClient {
     private final RestTemplate restTemplate;
     private final String CLIENT_SERVICE_BASE_URL;
 
-    public UserServiceClient(RestTemplateBuilder restTemplate, @Value("${app.user-service.host}") String UserServiceHost, @Value("${app.user-service.port}") String UserServicePort) {
-        this.restTemplate = restTemplate.build();
+    public UserServiceClient(RestTemplate restTemplate, @Value("${app.user-service.host}") String UserServiceHost, @Value("${app.user-service.port}") String UserServicePort) {
+        this.restTemplate = restTemplate;
         CLIENT_SERVICE_BASE_URL = "http://" + UserServiceHost + ":" + UserServicePort + "/api/v1/users";
     }
 

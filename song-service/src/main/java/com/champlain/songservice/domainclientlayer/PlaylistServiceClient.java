@@ -22,8 +22,8 @@ public class PlaylistServiceClient {
     private final RestTemplate restTemplate;
     private final String PLAYLIST_SERVICE_BASE_URL;
 
-    public PlaylistServiceClient(RestTemplateBuilder restTemplate, @Value("${app.playlist-service.host}") String host, @Value("${app.playlist-service.port}") String port) {
-        this.restTemplate = restTemplate.build();
+    public PlaylistServiceClient(RestTemplate restTemplate, @Value("${app.playlist-service.host}") String host, @Value("${app.playlist-service.port}") String port) {
+        this.restTemplate = restTemplate;
         PLAYLIST_SERVICE_BASE_URL = "http://" + host + ":" + port + "/api/v1/playlists";
     }
 

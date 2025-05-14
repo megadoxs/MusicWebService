@@ -17,8 +17,8 @@ public class SongServiceClient {
     private final RestTemplate restTemplate;
     private final String CLIENT_SERVICE_BASE_URL;
 
-    public SongServiceClient(RestTemplateBuilder restTemplate, @Value("${app.song-service.host}") String songServiceHost, @Value("${app.song-service.port}") String songServicePort) {
-        this.restTemplate = restTemplate.build();
+    public SongServiceClient(RestTemplate restTemplate, @Value("${app.song-service.host}") String songServiceHost, @Value("${app.song-service.port}") String songServicePort) {
+        this.restTemplate = restTemplate;
         CLIENT_SERVICE_BASE_URL = "http://" + songServiceHost + ":" + songServicePort + "/api/v1/songs";
         log.debug(CLIENT_SERVICE_BASE_URL);
     }

@@ -26,10 +26,10 @@ repositories {
 
 dependencies {
     // Spring Boot starters
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-hateoas")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
     // MySQL and H2 (runtime-only)
     runtimeOnly("com.mysql:mysql-connector-j")

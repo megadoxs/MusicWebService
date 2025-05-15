@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -21,10 +22,17 @@ public interface ArtistResponseModelMapper {
 
     @AfterMapping
     default void addLinks(@MappingTarget ArtistResponseModel artistResponseModel, Artist artist) {
+        UriComponentsBuilder baseUri = UriComponentsBuilder.fromHttpUrl("http://localhost:8080");
+
         Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
                 .methodOn(ArtistController.class)
                 .getArtistById(artist.getIdentifier().getArtistId())
-        ).withSelfRel();
+        ).withSelfRel().withHref(baseUri
+                .path(WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(ArtistController.class)
+                                        .getArtistById(artist.getIdentifier().getArtistId()))
+                        .toUri().getPath())
+                .toUriString());
 
         artistResponseModel.add(selfLink);
     }

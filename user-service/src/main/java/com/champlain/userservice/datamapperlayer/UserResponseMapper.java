@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -22,10 +23,17 @@ public interface UserResponseMapper {
 
     @AfterMapping
     default void addLinks(@MappingTarget UserResponseModel userResponseModel, User user) {
+        UriComponentsBuilder baseUri = UriComponentsBuilder.fromHttpUrl("http://localhost:8080");
+
         Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
                 .methodOn(UserController.class)
                 .getUserByUserId(user.getUserIdentifier().getUserId())
-        ).withSelfRel();
+        ).withSelfRel().withHref(baseUri
+                .path(WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(UserController.class)
+                                        .getUserByUserId(user.getUserIdentifier().getUserId()))
+                        .toUri().getPath())
+                .toUriString());
 
         userResponseModel.add(selfLink);
     }

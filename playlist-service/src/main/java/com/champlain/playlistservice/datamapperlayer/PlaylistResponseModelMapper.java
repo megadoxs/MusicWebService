@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -23,15 +24,30 @@ public interface PlaylistResponseModelMapper {
 
     @AfterMapping
     default void addLinks(@MappingTarget PlaylistResponseModel playlistResponseModel, Playlist playlist) {
-        Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
-                .methodOn(PlaylistController.class)
-                .getPlaylistById(playlist.getIdentifier().getPlaylistId())
-        ).withSelfRel();
+
+        UriComponentsBuilder baseUri = UriComponentsBuilder.fromHttpUrl("http://localhost:8080");
+
+        Link selfLink = WebMvcLinkBuilder.linkTo(
+                WebMvcLinkBuilder.methodOn(PlaylistController.class)
+                        .getPlaylistById(playlist.getIdentifier().getPlaylistId())
+        ).withSelfRel().withHref(baseUri
+                .path(WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(PlaylistController.class)
+                                        .getPlaylistById(playlist.getIdentifier().getPlaylistId()))
+                        .toUri().getPath())
+                .toUriString());
+
 
         Link artistsLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
                 .methodOn(PlaylistController.class)
                 .getAllArtists(playlist.getIdentifier().getPlaylistId())
-        ).withRel("artists");
+        ).withRel("artists").withHref(baseUri
+                .path(WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(PlaylistController.class)
+                                        .getAllArtists(playlist.getIdentifier().getPlaylistId()))
+                        .toUri().getPath())
+                .toUriString()
+        );
 
         playlistResponseModel.add(selfLink);
         playlistResponseModel.add(artistsLink);

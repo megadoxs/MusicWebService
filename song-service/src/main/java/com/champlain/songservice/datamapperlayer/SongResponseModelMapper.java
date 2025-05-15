@@ -9,6 +9,7 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
@@ -22,10 +23,17 @@ public interface SongResponseModelMapper {
 
     @AfterMapping
     default void addLinks(@MappingTarget SongResponseModel songResponseModel, Song song) {
+        UriComponentsBuilder baseUri = UriComponentsBuilder.fromHttpUrl("http://localhost:8080");
+
         Link selfLink = WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder
                 .methodOn(SongController.class)
                 .getSongById(song.getIdentifier().getSongId())
-        ).withSelfRel();
+        ).withSelfRel().withHref(baseUri
+                .path(WebMvcLinkBuilder.linkTo(
+                                WebMvcLinkBuilder.methodOn(SongController.class)
+                                        .getSongById(song.getIdentifier().getSongId()))
+                        .toUri().getPath())
+                .toUriString());
 
         songResponseModel.add(selfLink);
     }

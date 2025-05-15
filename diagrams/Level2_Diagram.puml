@@ -10,9 +10,9 @@ SHOW_PERSON_OUTLINE()
 title Level 2 – System Context Diagram for Music Listening Platform
 
 Person(user, "User", "A user of the music listening platform.")
+Person(artist, "Artist", "A music artist who uploads songs and albums.")
 
 System_Boundary(c1, "Music Listening Platform") {
-    Container(webApp, "Web Application", "Java, Spring MVC", "Serves static HTML, CSS, and JavaScript for the music application")
     Container(spaApp, "Single-Page App", "JavaScript, Angular", "Client-side music interface loaded in the browser")
     Container(apiGateway, "API Gateway", "Java, Spring Cloud Gateway, Docker", "Routes and aggregates requests to backend microservices", $tags="microService")
     Container(artistSvc, "Artist Service", "Java, Spring Boot, Docker", "Manages artist data and metadata", $tags="microService")
@@ -25,12 +25,10 @@ System_Boundary(c1, "Music Listening Platform") {
     ContainerDb(playlistDb, "playlist-db", "MySQL", "Stores playlists and song links", $tags="storage")
 }
 
-Rel(user, webApp, "Uses", "HTTPS")
 Rel(user, spaApp, "Uses", "HTTPS")
 
-Rel(webApp, spaApp, "Serves SPA", "HTTPS/HTML")
 
-Rel(spaApp, apiGateway, "Sends API requests to", "HTTPS/JSON")
+Rel(apiGateway, spaApp, "Sends responses to", "HTTPS/JSON")
 Rel(apiGateway, artistSvc, "Forwards artist requests to", "HTTPS/JSON")
 Rel(apiGateway, songSvc, "Forwards song requests to", "HTTPS/JSON")
 Rel(apiGateway, userSvc, "Forwards user requests to", "HTTPS/JSON")
@@ -44,5 +42,6 @@ Rel_D(artistSvc, artistDb, "Reads from and writes to", "JDBC/SQL")
 Rel_D(songSvc, songDb, "Reads from and writes to", "JDBC/SQL")
 Rel_D(userSvc, userDb, "Reads from and writes to", "JDBC/SQL")
 Rel_D(playlistSvc, playlistDb, "Reads from and writes to", "JDBC/SQL")
-
+Rel(artist, spaApp, "Uses", "HTTPS")
+Rel(spaApp, apiGateway, "Sends API requests to", "HTTPS/JSON")
 @enduml

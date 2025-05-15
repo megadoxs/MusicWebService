@@ -1,6 +1,6 @@
 package com.champlain.playlistservice.utils;
 
-import com.champlain.playlistservice.utils.exceptions.DuplicateVinException;
+import com.champlain.playlistservice.utils.exceptions.DuplicatePlaylistNameException;
 import com.champlain.playlistservice.utils.exceptions.InvalidInputException;
 import com.champlain.playlistservice.utils.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
@@ -30,8 +30,8 @@ public class GlobalControllerExceptionHandler {
     }
 
     @ResponseStatus(UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(DuplicateVinException.class)
-    public HttpErrorInfo handleDuplicateVinException(WebRequest request, Exception ex) {
+    @ExceptionHandler(DuplicatePlaylistNameException.class)
+    public HttpErrorInfo handleDuplicatePlaylistNameException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
     }
 

@@ -11,6 +11,7 @@ import com.champlain.playlistservice.presentationlayer.ArtistResponseModel;
 import com.champlain.playlistservice.presentationlayer.PlaylistRequestModel;
 import com.champlain.playlistservice.presentationlayer.PlaylistResponseModel;
 import com.champlain.playlistservice.presentationlayer.SongResponseModel;
+import com.champlain.playlistservice.utils.exceptions.DuplicatePlaylistNameException;
 import com.champlain.playlistservice.utils.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -73,6 +74,10 @@ public class PlaylistServiceImpl implements PlaylistService {
     @Override
     public PlaylistResponseModel addPlaylist(PlaylistRequestModel playlistRequestModel) {
         Playlist playlist = playlistRequestModelMapper.requestModelToEntity(playlistRequestModel);
+
+        if(playlistRepository.existsByName(playlist.getName()))
+            throw new DuplicatePlaylistNameException("Playlist name " + playlist.getName() + " already exists.");
+
         Duration duration = Duration.ZERO;
         for (String songIdentifier : playlist.getSongs()) {
             SongResponseModel song = songServiceClient.getSongById(songIdentifier);

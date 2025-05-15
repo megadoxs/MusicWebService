@@ -10,7 +10,8 @@ public class ResourceNotFoundException extends EntityNotFoundException {
         super(message);
     }
 
-    public static ResourceNotFoundException saleNotFound(UUID saleId) {
-        return new ResourceNotFoundException("Sale not found with ID: " + saleId);
+    // Not implemented yet
+    public static ResourceNotFoundException playlistNotFound(UUID playlistId) {
+        return new ResourceNotFoundException("Playlist not found with ID: " + playlistId);
     }
 }

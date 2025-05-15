@@ -3,6 +3,9 @@ package com.champlain.songservice.dataaccesslayer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -15,6 +18,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
 public class SongRepositoryIntegrationTest {
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        public RestTemplateBuilder restTemplateBuilder() {
+            return new RestTemplateBuilder();
+        }
+    }
+
     private final String VALID_SONG_ID = "100e8400-e29b-41d4-a716-446655440010";
     private final String NOT_FOUND_SONG_ID = "100e8400-e29b-41d4-a716-44665544001";
     private final String VALID_SONG_NAME = "Shallow";
@@ -99,7 +111,6 @@ public class SongRepositoryIntegrationTest {
 
         Song savedSong = songRepository.save(song);
 
-        songRepository.save(savedSong);
         assertNotNull(savedSong);
         assertEquals(song.getId(), savedSong.getId());
         assertEquals(song.getIdentifier().getSongId(), savedSong.getIdentifier().getSongId());

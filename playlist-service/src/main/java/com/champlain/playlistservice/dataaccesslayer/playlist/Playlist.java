@@ -13,6 +13,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class Playlist {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

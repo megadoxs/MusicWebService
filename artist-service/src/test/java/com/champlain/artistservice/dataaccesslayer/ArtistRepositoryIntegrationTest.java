@@ -3,6 +3,9 @@ package com.champlain.artistservice.dataaccesslayer;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,6 +17,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ActiveProfiles("test-profile")
 @DataMongoTest
 public class ArtistRepositoryIntegrationTest {
+
+    @TestConfiguration
+    static class TestConfig {
+        @Bean
+        public RestTemplateBuilder restTemplateBuilder() {
+            return new RestTemplateBuilder();
+        }
+    }
+
     private final String VALID_ARTIST_ID = "550e8400-e29b-41d4-a716-446655440000";
     private final String VALID_ARTIST_ID_2 = "550e8400-e29b-41d4-a716-446655440001";
     private final String VALID_ARTIST_ID_3 = "550e8400-e29b-41d4-a716-446655440002";

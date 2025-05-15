@@ -280,7 +280,6 @@ public class SongControllerIntegrationTest {
                 .expectBody()
                 .jsonPath("$.httpStatus").isEqualTo("NOT_FOUND")
                 .jsonPath("$.message").isEqualTo("artist with id " + "some invalid artist id" + " was not found");
-
     }
 
     @Test
@@ -305,7 +304,6 @@ public class SongControllerIntegrationTest {
                 .expectBody()
                 .jsonPath("$.httpStatus").isEqualTo("BAD_REQUEST")
                 .jsonPath("$.message").isEqualTo("Title " + "Lose Yourself" + " already exists");
-
     }
 
     @Test

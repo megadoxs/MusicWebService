@@ -3,7 +3,6 @@ package com.champlain.apigatewayservice.domainclientlayer;
 import com.champlain.apigatewayservice.presentationlayer.userdto.UserRequestModel;
 import com.champlain.apigatewayservice.presentationlayer.userdto.UserResponseModel;
 import com.champlain.apigatewayservice.utils.exceptions.DuplicateUsernameException;
-import com.champlain.apigatewayservice.utils.exceptions.InvalidInputException;
 import com.champlain.apigatewayservice.utils.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

@@ -2,10 +2,7 @@ package com.champlain.apigatewayservice.presentationlayer.playlistdto;
 
 import com.champlain.apigatewayservice.presentationlayer.songdto.SongResponseModel;
 import com.champlain.apigatewayservice.presentationlayer.userdto.UserResponseModel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.sql.Time;
@@ -15,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class PlaylistResponseModel extends RepresentationModel<PlaylistResponseModel> {
     private String identifier;
     private String name;

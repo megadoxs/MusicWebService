@@ -3,7 +3,6 @@ package com.champlain.apigatewayservice.domainclientlayer;
 import com.champlain.apigatewayservice.presentationlayer.songdto.SongRequestModel;
 import com.champlain.apigatewayservice.presentationlayer.songdto.SongResponseModel;
 import com.champlain.apigatewayservice.utils.exceptions.DuplicateSongTitleException;
-import com.champlain.apigatewayservice.utils.exceptions.InvalidInputException;
 import com.champlain.apigatewayservice.utils.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

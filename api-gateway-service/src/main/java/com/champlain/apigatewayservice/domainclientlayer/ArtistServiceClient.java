@@ -3,7 +3,6 @@ package com.champlain.apigatewayservice.domainclientlayer;
 import com.champlain.apigatewayservice.presentationlayer.artistdto.ArtistRequestModel;
 import com.champlain.apigatewayservice.presentationlayer.artistdto.ArtistResponseModel;
 import com.champlain.apigatewayservice.utils.exceptions.DuplicateStageNameException;
-import com.champlain.apigatewayservice.utils.exceptions.InvalidInputException;
 import com.champlain.apigatewayservice.utils.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

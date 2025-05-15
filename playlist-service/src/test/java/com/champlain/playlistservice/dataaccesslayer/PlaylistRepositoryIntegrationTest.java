@@ -54,6 +54,15 @@ public class PlaylistRepositoryIntegrationTest {
     }
 
     @Test
+    public void whenPlaylistNotExist_ReturnPlaylistById() {
+        //act
+        Playlist playlist = playlistRepository.findByIdentifier_PlaylistId(NOT_FOUND_PLAYLIST_ID);
+
+        //assert
+        assertNull(playlist);
+    }
+
+    @Test
     public void whenPlaylistsExist_ReturnAllPlaylists() {
         Long sizeDB = playlistRepository.count();
 
@@ -87,8 +96,6 @@ public class PlaylistRepositoryIntegrationTest {
 
     @Test
     public void whenUpdatePlaylist_ReturnPlaylist(){
-        Playlist foundPlaylist = playlistRepository.findByIdentifier_PlaylistId(VALID_PLAYLIST_ID);
-
         Playlist playlist = Playlist.builder()
                 .identifier(new PlaylistIdentifier())
                 .name("new playlist")
@@ -113,5 +120,10 @@ public class PlaylistRepositoryIntegrationTest {
         playlistRepository.delete(playlistRepository.findByIdentifier_PlaylistId(VALID_PLAYLIST_ID));
 
         assertNull(playlistRepository.findByIdentifier_PlaylistId(VALID_PLAYLIST_ID));
+    }
+
+    @Test
+    public void whenPlaylistNotExist_ReturnNull(){
+        assertNull(playlistRepository.findByIdentifier_PlaylistId(NOT_FOUND_PLAYLIST_ID));
     }
 }

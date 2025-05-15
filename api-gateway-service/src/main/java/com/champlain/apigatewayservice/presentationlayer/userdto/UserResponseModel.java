@@ -1,16 +1,14 @@
 package com.champlain.apigatewayservice.presentationlayer.userdto;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.hateoas.RepresentationModel;
 
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class UserResponseModel extends RepresentationModel<UserResponseModel> {
     private String userId;
     private String username;

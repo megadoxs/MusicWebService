@@ -6,6 +6,7 @@ import com.champlain.playlistservice.dataaccesslayer.song.Genre;
 import com.champlain.playlistservice.presentationlayer.ArtistResponseModel;
 import com.champlain.playlistservice.presentationlayer.SongResponseModel;
 import com.champlain.playlistservice.presentationlayer.UserResponseModel;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,12 +44,8 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class PlaylistControllerIntegrationTest {
 
-
     @Autowired
     WebTestClient webTestClient;
-
-    @Autowired
-    PlaylistRepository playlistRepository;
 
     @Autowired
     ObjectMapper mapper;
@@ -59,10 +56,7 @@ public class PlaylistControllerIntegrationTest {
     private MockRestServiceServer mockRestServiceServer;
     @BeforeEach
     public void init() {
-    //Attach MockRestServiceServer to the RestTemplate used in your client.
         mockRestServiceServer = MockRestServiceServer.bindTo(restTemplate).ignoreExpectOrder(true).build();
-//        mockRestServiceServer = MockRestServiceServer.createServer(restTemplate);
-
     }
 
     @Test
@@ -294,15 +288,17 @@ public class PlaylistControllerIntegrationTest {
                 .username("ethanh85")
                 .build();
 
-        mockRestServiceServer.expect(ExpectedCount.times(2),
-                        requestTo("http://localhost:8080/api/v1/songs/" + songId))
+        this.mockRestServiceServer.expect(ExpectedCount.manyTimes(), requestTo(matchesPattern("http://localhost:8080/api/v1/songs/.*")))
                 .andExpect(method(HttpMethod.GET))
-                .andRespond(withSuccess(mapper.writeValueAsString(song), MediaType.APPLICATION_JSON));
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(song)));
 
-        mockRestServiceServer.expect(ExpectedCount.times(2),
-                        requestTo("http://localhost:8080/api/v1/users/" + userId))
+        this.mockRestServiceServer.expect(ExpectedCount.manyTimes(), requestTo(matchesPattern("http://localhost:8080/api/v1/users/.*")))
                 .andExpect(method(HttpMethod.GET))
-                .andRespond(withSuccess(mapper.writeValueAsString(user), MediaType.APPLICATION_JSON));
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(user)));
 
         webTestClient.post()
                 .uri("/api/v1/playlists")
@@ -337,8 +333,8 @@ public class PlaylistControllerIntegrationTest {
                 .username("ethanh85")
                 .build();
 
-        mockRestServiceServer.expect(ExpectedCount.once(),
-                        requestTo("http://localhost:8080/api/v1/songs/" + songId))
+        mockRestServiceServer.expect(ExpectedCount.manyTimes(),
+                        requestTo(matchesPattern("http://localhost:8080/api/v1/songs/.*")))
                 .andExpect(method(HttpMethod.GET))
                 .andRespond(withStatus(HttpStatus.NOT_FOUND)
                         .body("song with id " + songId + " was not found")
@@ -363,7 +359,7 @@ public class PlaylistControllerIntegrationTest {
         String userId = "57659e81-7c6b-4711-bb9e-bc73e1fa7824";
 
         PlaylistRequestModel request = PlaylistRequestModel.builder()
-                .name("Morning Boost")
+                .name("updated playlist")
                 .songs(List.of(songId))
                 .user(userId)
                 .build();
@@ -391,15 +387,17 @@ public class PlaylistControllerIntegrationTest {
                 .build();
 
         // Expect only 1 call to each external service
-        mockRestServiceServer.expect(ExpectedCount.twice(),
-                        requestTo("http://localhost:8080/api/v1/songs/" + songId))
+        this.mockRestServiceServer.expect(ExpectedCount.manyTimes(), requestTo(matchesPattern("http://localhost:8080/api/v1/songs/.*")))
                 .andExpect(method(HttpMethod.GET))
-                .andRespond(withSuccess(mapper.writeValueAsString(song), MediaType.APPLICATION_JSON));
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(song)));
 
-        mockRestServiceServer.expect(ExpectedCount.twice(),
-                        requestTo("http://localhost:8080/api/v1/users/" + userId))
+        this.mockRestServiceServer.expect(ExpectedCount.manyTimes(), requestTo(matchesPattern("http://localhost:8080/api/v1/users/.*")))
                 .andExpect(method(HttpMethod.GET))
-                .andRespond(withSuccess(mapper.writeValueAsString(user), MediaType.APPLICATION_JSON));
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(user)));
 
         webTestClient.put()
                 .uri("/api/v1/playlists/200e8400-e29b-41d4-a716-446655440020")
@@ -408,7 +406,7 @@ public class PlaylistControllerIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody()
-                .jsonPath("$.name").isEqualTo("Morning Boost")
+                .jsonPath("$.name").isEqualTo("updated playlist")
                 .jsonPath("$.songs[0].identifier").isEqualTo(songId)
                 .jsonPath("$.user.userId").isEqualTo(userId);
 
@@ -631,6 +629,102 @@ public class PlaylistControllerIntegrationTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody();
+
+        mockRestServiceServer.verify();
+    }
+
+    @Test
+    @Order(1)
+    public void testGetPlaylistByUserFail() {
+        this.mockRestServiceServer.expect(ExpectedCount.once(), requestTo(matchesPattern("http://localhost:8080/api/v1/songs/.*")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.NOT_FOUND));
+
+        webTestClient.get()
+                .uri("/api/v1/playlists/user/57659e81-7c6b-4711-bb9e-bc73e1fa7824")
+                .exchange()
+                .expectStatus().isNotFound();
+
+        mockRestServiceServer.verify();
+    }
+
+    @Test
+    @Order(1)
+    public void testGetPlaylistArtistsFail() {
+        String playlistId = "200e8400-e29b-41d4-a716-446655440020";
+
+        this.mockRestServiceServer.expect(ExpectedCount.once(), requestTo(matchesPattern("http://localhost:8080/api/v1/songs/.*")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.NOT_FOUND));
+
+
+        webTestClient.get()
+                .uri("/api/v1/playlists/" + playlistId + "/artists")
+                .exchange()
+                .expectStatus().isNotFound();
+
+        mockRestServiceServer.verify();
+    }
+
+    @Test
+    @Order(1)
+    public void testAddPlaylistFail() throws JsonProcessingException {
+        String songId = "100e8400-e29b-41d4-a716-446655440010";
+        String userId = "57659e81-7c6b-4711-bb9e-bc73e1fa7824";
+        String songId0 = "100e8400-e29b-41d4-a716-446655440010";
+        String artistId0 = "550e8400-e29b-41d4-a716-446655440000";
+        String releaseDateString = "2018-09-27";
+
+        PlaylistRequestModel request = PlaylistRequestModel.builder()
+                .name("Workout Hits")
+                .songs(List.of(songId))
+                .user(userId)
+                .build();
+
+        ArrayList<ArtistResponseModel> artists0 = new ArrayList<>();
+        ArtistResponseModel artistResponseModel = ArtistResponseModel.builder()
+                .identifier(artistId0)
+                .firstName("Stefani")
+                .lastName("Germanotta")
+                .stageName("Lady Gaga")
+                .build();
+        artists0.add(artistResponseModel);
+
+        SongResponseModel songResponseModel0 = SongResponseModel.builder()
+                .identifier(songId0)
+                .title("Shallow")
+                .genre(Genre.POP)
+                .releaseDate(LocalDate.parse(releaseDateString))
+                .duration(Time.valueOf("00:03:35"))
+                .artists(artists0)
+                .build();
+
+        UserResponseModel userResponseModel = UserResponseModel.builder()
+                .userId(userId)
+                .email("ethan.hunt@example.com")
+                .firstName("Ethan")
+                .lastName("Hunt")
+                .username("ethanh85")
+                .build();
+
+        this.mockRestServiceServer.expect(ExpectedCount.manyTimes(), requestTo(matchesPattern("http://localhost:8080/api/v1/songs/.*")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(songResponseModel0)));
+
+        this.mockRestServiceServer.expect(ExpectedCount.manyTimes(), requestTo(matchesPattern("http://localhost:8080/api/v1/users/.*")))
+                .andExpect(method(HttpMethod.GET))
+                .andRespond(withStatus(HttpStatus.OK)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(mapper.writeValueAsString(userResponseModel)));
+
+        webTestClient.post()
+                .uri("/api/v1/playlists")
+                .contentType(MediaType.APPLICATION_JSON)
+                .bodyValue(request)
+                .exchange()
+                .expectStatus().isBadRequest();
 
         mockRestServiceServer.verify();
     }

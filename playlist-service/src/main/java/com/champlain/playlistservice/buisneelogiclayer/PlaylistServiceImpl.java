@@ -11,6 +11,7 @@ import com.champlain.playlistservice.presentationlayer.ArtistResponseModel;
 import com.champlain.playlistservice.presentationlayer.PlaylistRequestModel;
 import com.champlain.playlistservice.presentationlayer.PlaylistResponseModel;
 import com.champlain.playlistservice.presentationlayer.SongResponseModel;
+import com.champlain.playlistservice.utils.exceptions.DuplicateUserPlaylist;
 import com.champlain.playlistservice.utils.exceptions.NotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import java.sql.Time;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PlaylistServiceImpl implements PlaylistService {
@@ -74,6 +76,10 @@ public class PlaylistServiceImpl implements PlaylistService {
     public PlaylistResponseModel addPlaylist(PlaylistRequestModel playlistRequestModel) {
         Playlist playlist = playlistRequestModelMapper.requestModelToEntity(playlistRequestModel);
         Duration duration = Duration.ZERO;
+
+        if(getPlaylistsByUserId(playlist.getUser()).stream().anyMatch(p -> p.getName().equals(playlist.getName())))
+            throw new DuplicateUserPlaylist("User: " + playlist.getUser() + " already has a playlist with name: " + playlist.getName());
+
         for (String songIdentifier : playlist.getSongs()) {
             SongResponseModel song = songServiceClient.getSongById(songIdentifier);
             if (song == null)
@@ -96,8 +102,13 @@ public class PlaylistServiceImpl implements PlaylistService {
     public PlaylistResponseModel updatePlaylist(PlaylistRequestModel playlistRequestModel, String playlistId) {
         Playlist oldPlaylist = playlistRepository.findByIdentifier_PlaylistId(playlistId);
         if (oldPlaylist != null) {
+
             Playlist playlist = playlistRequestModelMapper.requestModelToEntity(playlistRequestModel);
             Duration duration = Duration.ZERO;
+
+            if(getPlaylistsByUserId(playlist.getUser()).stream().anyMatch(p -> p.getName().equals(playlist.getName()) && !Objects.equals(p.getIdentifier(), oldPlaylist.getIdentifier().getPlaylistId())))
+                throw new DuplicateUserPlaylist("User: " + playlist.getUser() + " already has a playlist with name: " + playlist.getName());
+
             for (String songIdentifier : playlist.getSongs()) {
                 SongResponseModel song = songServiceClient.getSongById(songIdentifier);
                 if (song == null)

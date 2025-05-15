@@ -21,8 +21,8 @@ public class GlobalControllerExceptionHandler {
     }
 
     @ResponseStatus(BAD_REQUEST)
-    @ExceptionHandler(InvalidInputException.class)
-    public HttpErrorInfo handleInvalidInputException(WebRequest request, Exception ex) {
+    @ExceptionHandler(DuplicateUserPlaylist.class)
+    public HttpErrorInfo handleDuplicateUserPlaylistException(WebRequest request, Exception ex) {
         return createHttpErrorInfo(UNPROCESSABLE_ENTITY, request, ex);
     }
 

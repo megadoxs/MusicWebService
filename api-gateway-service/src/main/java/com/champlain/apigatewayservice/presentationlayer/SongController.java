@@ -32,12 +32,12 @@ public class SongController {
 
     @PostMapping()
     public ResponseEntity<SongResponseModel> addSong(@RequestBody SongRequestModel songRequestModel) {
-        return ResponseEntity.ok().body(songService.addSong(songRequestModel));
+        return ResponseEntity.status(HttpStatus.CREATED).body(songService.addSong(songRequestModel));
     }
 
     @PutMapping("/{songId}")
     public ResponseEntity<SongResponseModel> updateSong(@RequestBody SongRequestModel songRequestModel, @PathVariable String songId) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(songService.updateSong(songRequestModel, songId));
+        return ResponseEntity.ok().body(songService.updateSong(songRequestModel, songId));
     }
 
     @DeleteMapping("/{songId}")

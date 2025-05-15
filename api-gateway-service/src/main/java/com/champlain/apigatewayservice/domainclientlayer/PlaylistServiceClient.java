@@ -3,7 +3,7 @@ package com.champlain.apigatewayservice.domainclientlayer;
 import com.champlain.apigatewayservice.presentationlayer.artistdto.ArtistResponseModel;
 import com.champlain.apigatewayservice.presentationlayer.playlistdto.PlaylistRequestModel;
 import com.champlain.apigatewayservice.presentationlayer.playlistdto.PlaylistResponseModel;
-import com.champlain.apigatewayservice.utils.exceptions.InvalidInputException;
+import com.champlain.apigatewayservice.utils.exceptions.DuplicateUserPlaylist;
 import com.champlain.apigatewayservice.utils.exceptions.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,8 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+import static org.springframework.http.HttpStatus.*;
 
 @Component
 @Slf4j
@@ -82,10 +81,10 @@ public class PlaylistServiceClient {
     }
 
     private RuntimeException handleHttpClientException(HttpClientErrorException e) {
-        if (e.getStatusCode() == UNPROCESSABLE_ENTITY)
-            throw new InvalidInputException();
-        else if (e.getStatusCode() == NOT_FOUND)
-            throw new NotFoundException();
+        if(e.getStatusCode() == BAD_REQUEST)
+            throw new DuplicateUserPlaylist(e.getMessage());
+         else if (e.getStatusCode() == NOT_FOUND)
+            throw new NotFoundException(e.getMessage());
         return e;
     }
 }

@@ -14,3 +14,23 @@ app:
   playlist-service:
     host: playlistservicehost
     port: 8080
+
+---
+spring:
+  config:
+    activate:
+      on-profile: h2
+
+app:
+  user-service:
+    host: localhost
+    port: 8080
+  artist-service:
+    host: localhost
+    port: 8080
+  song-service:
+    host: localhost
+    port: 8080
+  playlist-service:
+    host: localhost
+    port: 8080

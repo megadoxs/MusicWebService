@@ -9,4 +9,6 @@ public interface PlaylistRepository extends JpaRepository<Playlist, Integer> {
     List<Playlist> findAllByUser(String userId);
     void deleteAllByUser(String userId);
     List<Playlist> findAllBySongsContains(String songId);
+
+    boolean existsByName(String name);
 }

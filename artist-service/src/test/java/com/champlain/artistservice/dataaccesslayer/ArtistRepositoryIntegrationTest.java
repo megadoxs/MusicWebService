@@ -1,6 +1,9 @@
 package com.champlain.artistservice.dataaccesslayer;
 
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -16,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test-profile")
 @DataMongoTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ArtistRepositoryIntegrationTest {
 
     @TestConfiguration
@@ -47,6 +51,7 @@ public class ArtistRepositoryIntegrationTest {
     }
 
     @Test
+    @Order(1)
     public void whenArtistExist_ReturnArtistById() {
         //act
         Artist artist = artistRepository.findArtistByIdentifier_ArtistId(VALID_ARTIST_ID);

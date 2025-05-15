@@ -86,7 +86,7 @@ services:
     container_name: mongo-express
     restart: always
     ports:
-      - 5050:5050
+      - 5050:8081
     depends_on:
       mongo:
         condition: service_healthy

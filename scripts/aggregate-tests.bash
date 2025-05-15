@@ -36,8 +36,7 @@ create_response=$(curl -s -w "\n%{http_code}" -X POST "$API_URL" \
 
 create_body=$(echo "$create_response" | sed '$d')
 create_status=$(echo "$create_response" | tail -n1)
-
-if [ "$create_status" -ne 201 ]; then
+if [ "$create_status" -eq 400 ]; then
   echo "❌ Failed to create playlist, status $create_status"
   echo "$create_body"
   exit 1

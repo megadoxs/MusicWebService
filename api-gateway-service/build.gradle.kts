@@ -44,6 +44,7 @@ dependencies {
     annotationProcessor("org.mapstruct:mapstruct-processor:1.6.0")
 
     // Testing
+    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     implementation("org.springframework.boot:spring-boot-starter-webflux")
     implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
@@ -93,4 +94,14 @@ tasks.jacocoTestCoverageVerification {
 
 tasks.test {
     finalizedBy(tasks.jacocoTestReport)
+}
+tasks.test {
+    useJUnitPlatform() // Ensure JUnit 5 is used if applicable
+    testLogging {
+        events("PASSED", "FAILED", "SKIPPED") // Show passed, failed, and skipped tests
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+    }
 }

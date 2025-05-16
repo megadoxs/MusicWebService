@@ -103,3 +103,14 @@ tasks.jacocoTestCoverageVerification {
 tasks.test {
     finalizedBy(tasks.jacocoTestReport)
 }
+
+tasks.test {
+    useJUnitPlatform() // Ensure JUnit 5 is used if applicable
+    testLogging {
+        events("PASSED", "FAILED", "SKIPPED") // Show passed, failed, and skipped tests
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+    }
+}

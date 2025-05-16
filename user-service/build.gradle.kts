@@ -30,13 +30,13 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-hateoas")
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.projectlombok:lombok")
 
     // MySQL and H2 (runtime-only)
 //    runtimeOnly("com.mysql:mysql-connector-j")
     runtimeOnly("com.h2database:h2")
 
     // Lombok (compile-only + annotation processor)
-    compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
 
     // MapStruct
@@ -104,4 +104,14 @@ tasks.jacocoTestCoverageVerification {
 
 tasks.test {
     finalizedBy(tasks.jacocoTestReport)
+}
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("PASSED", "FAILED", "SKIPPED") // Show passed, failed, and skipped tests
+        exceptionFormat = org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
+        showExceptions = true
+        showCauses = true
+        showStackTraces = true
+    }
 }

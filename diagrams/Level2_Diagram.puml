@@ -19,7 +19,7 @@ System_Boundary(c1, "Music Listening Platform") {
     Container(songSvc, "Song Service", "Java, Spring Boot, Docker", "Manages song catalog and metadata", $tags="microService")
     Container(userSvc, "User Service", "Java, Spring Boot, Docker", "Manages user profiles and authentication", $tags="microService")
     Container(playlistSvc, "Playlist Service", "Java, Spring Boot, Docker", "Handles user playlists and song associations", $tags="microService")
-    ContainerDb(artistDb, "artist-db", "MySQL", "Stores artist records", $tags="storage")
+    ContainerDb(artistDb, "artist-db", "MongoDB", "Stores artist records", $tags="storage")
     ContainerDb(songDb, "song-db", "MySQL", "Stores songs and artist relationships", $tags="storage")
     ContainerDb(userDb, "user-db", "PostgreSQL", "Stores user profiles and credentials", $tags="storage")
     ContainerDb(playlistDb, "playlist-db", "MySQL", "Stores playlists and song links", $tags="storage")
